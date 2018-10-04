@@ -162,9 +162,13 @@ function collectDOMStat(root) {
   };
   for(let i = 0; i < root.childNodes.length; i++){
     if(root.childNodes[i].nodeType === 3) {
-      texts += 1;
+      obj.text += 1;
     } else if (root.childNodes[i].classList.length > 0){
-     
+      for( let a = 0; a < root.childNodes[i].classList.length; a++){
+        let className = root.childNodes[i].classList[a];
+        obj.classes[className];
+      }
+      obj.classes[""]
     } else if (root.childNodes[i].nodeName !== undefined ){
 
     }
