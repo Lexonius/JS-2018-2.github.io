@@ -148,8 +148,12 @@ function deleteTextNodesRecursive(where) {
    Для дерева <div class="some-class-1"><b>привет!</b> <b class="some-class-1 some-class-2">loftschool</b></div>
    должен быть возвращен такой объект:
    {
-     tags: { DIV: 1, B: 2},
-     classes: { "some-class-1": 2, "some-class-2": 1 },
+     tags: { DIV: 1, 
+      B: 2},
+     classes: { 
+       "some-class-1": 2, 
+       "some-class-2": 1 
+      },
      texts: 3
    }
  */
@@ -157,25 +161,37 @@ function collectDOMStat(root) {
   ///console.log(root);
   let obj = {
     text:0,
-    classes:{},
-    tags:{} 
+    classes: {
+      className: "",
+      classesCounter: 0,
+    },
+    tags: {
+      tagsNames: undefined,
+      tagsCounter: 0,
+    } 
   };
+
   for(let i = 0; i < root.childNodes.length; i++){
     if(root.childNodes[i].nodeType === 3) {
       obj.text += 1;
+
     } else if (root.childNodes[i].classList.length > 0){
       for( let a = 0; a < root.childNodes[i].classList.length; a++){
         let className = root.childNodes[i].classList[a];
         obj.classes[className];
+        obj.classes.classesCounter += 1;
       }
-      obj.classes[""]
+
     } else if (root.childNodes[i].nodeName !== undefined ){
-
+          obj.tags.tagsNames.tagName;
+          obj.tags.tagsCounter += 1;
+        }
+      }
+    return obj;  
     }
-  }
-  return obj;
-}
-
+  
+  
+  
 /*
  Задание 8 *:
 
