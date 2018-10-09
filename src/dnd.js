@@ -31,14 +31,16 @@ const homeworkContainer = document.querySelector('#homework-container');
 function createDiv() {
     let elem = document.createElement('div');
     elem.className = "draggable-div";
+    elem.id = 'block'
     elem.style.width = widthGenerate();
     elem.style.height = heightGenerate();
     elem.style.backgroundColor = colorGenerate();
-    elem.setAttribute('draggable', 'true');
-    elem.style.position = 'relative';
+    //elem.setAttribute('draggable', 'true');
+    // elem.style.position = 'absolute';
     elem.style.left = positionHorizontal();
     elem.style.top = positionVertical();
     return elem;
+
   }
   
   function colorGenerate(){
@@ -49,22 +51,22 @@ function createDiv() {
   }
 
   function widthGenerate() {
-    let d = Math.random()*450;
+    let d = parseInt(Math.random()*450);
     return `${d}px`
   }
 
   function heightGenerate() {
-    let e = Math.random()*450;
+    let e = parseInt(Math.random()*450);
     return `${e}px`
   }
 
   function positionHorizontal(){
-    let f = Math.random()*150;
+    let f = parseInt(Math.random()*450);
     return `${f}px`
   }
 
   function positionVertical(){
-    let g = Math.random()*150;
+    let g = parseInt(Math.random()*450);
     return `${g}px`
   }
 
@@ -77,10 +79,28 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
-  let elemsDrugAndDrop = document.querySelectorAll("draggable-div");
-  [].forEach.call(elemsDrugAndDrop, function(col) {
-    col.addEventListener('dragstart', addListeners, false);
-  });
+  let elem;
+  let elemsDrugAndDrop = target;
+  document.onmousedown = function(e){
+    document.body.appendChild(elemsDrugAndDrop);
+  }
+  function moveAt(e) {
+    elemsDrugAndDrop.style.left = e.pageX - elemsDrugAndDrop.offsetWidth / 2 + 'px';
+    elemsDrugAndDrop.style.top = e.pageY - elemsDrugAndDrop.offsetHeight / 2 + 'px';
+  }
+  document.onmousemove = function(e) {
+    moveAt(e);
+  }
+
+  document.onmouseup = function() {
+    document.onmousemove = null;
+    elemsDrugAndDrop.onmouseup = null;
+  }
+
+  elemsDrugAndDrop.ondragstart = function() {
+    return false;
+  };
+
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
