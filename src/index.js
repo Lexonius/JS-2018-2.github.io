@@ -163,7 +163,7 @@ function collectDOMStat(root) {
     classes: {},
     tags: {} 
   };
-
+  collect(root);//первый запуск функции
   function collect(root) {
 
     for(let i = 0; i < root.childNodes.length; i++){
@@ -179,8 +179,8 @@ function collectDOMStat(root) {
       }
       
       for( let a = 0; a < root.childNodes[i].classList.length; a++){
-        if (root.childNodes[i].classList.length > 0){
-          let classNames = root.childNodes[i].classList[a];
+        let classNames = root.childNodes[i].classList[a];
+        if (obj.classes[classNames] !== undefined){
           obj.classes[classNames] = obj.classes[classNames] + 1;
         } else {
           obj.classes[classNames] = 1;
@@ -189,9 +189,11 @@ function collectDOMStat(root) {
         collect(root.childNodes[i]);
       }
     }   
-        //collect(root);
-      return obj;
-    }
+  }
+
+    //collect(root);//первый запуск функции
+
+    return obj;
   }
   
   
