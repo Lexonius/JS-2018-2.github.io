@@ -1,3 +1,5 @@
+import { SSL_OP_TLS_ROLLBACK_BUG } from "constants";
+
 /* Задание со звездочкой */
 
 /*
@@ -27,7 +29,44 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
-}
+    let elem = document.createElement('div');
+    elem.className = "draggable-div";
+    elem.style.width = widthGenerate();
+    elem.style.height = heightGenerate();
+    elem.style.backgroundColor = colorGenerate();
+    elem.setAttribute('draggable', 'true');
+    elem.style.position = 'relative';
+    elem.style.left = positionHorizontal();
+    elem.style.top = positionVertical();
+    return elem;
+  }
+  
+  function colorGenerate(){
+    const a = parseInt(Math.random()*255);
+    const b = parseInt(Math.random()*255);
+    const c = parseInt(Math.random()*255);
+    return `rgb(${a}, ${b}, ${c})`;
+  }
+
+  function widthGenerate() {
+    let d = Math.random()*450;
+    return `${d}px`
+  }
+
+  function heightGenerate() {
+    let e = Math.random()*450;
+    return `${e}px`
+  }
+
+  function positionHorizontal(){
+    let f = Math.random()*150;
+    return `${f}px`
+  }
+
+  function positionVertical(){
+    let g = Math.random()*150;
+    return `${g}px`
+  }
 
 /*
  Функция должна добавлять обработчики событий для перетаскивания элемента при помощи drag and drop
@@ -38,6 +77,10 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
+  let elemsDrugAndDrop = document.querySelectorAll("draggable-div");
+  [].forEach.call(elemsDrugAndDrop, function(col) {
+    col.addEventListener('dragstart', addListeners, false);
+  });
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -57,3 +100,5 @@ addDivButton.addEventListener('click', function() {
 export {
     createDiv
 };
+
+ 
