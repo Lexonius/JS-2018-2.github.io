@@ -158,37 +158,42 @@ function deleteTextNodesRecursive(where) {
    }
  */
 function collectDOMStat(root) {
-  ///console.log(root);
   let obj = {
-    text:0,
-    classes: {
-      className: "",
-      classesCounter: 0,
-    },
-    tags: {
-      tagsNames: undefined,
-      tagsCounter: 0,
-    } 
+    texts:0,
+    classes: {},
+    tags: {} 
   };
 
-  for(let i = 0; i < root.childNodes.length; i++){
-    if(root.childNodes[i].nodeType === 3) {
-      obj.text += 1;
+  function collect(root) {
 
-    } else if (root.childNodes[i].classList.length > 0){
+    for(let i = 0; i < root.childNodes.length; i++){
+      if(root.childNodes[i].nodeType === 3) {
+        obj.texts += 1;
+
+    } else if (root.childNodes[i].nodeType === 1){
+      let tagNameElem = root.childNodes[i].tagName;
+      if (obj.tags[tagNameElem] !== undefined) {
+        obj.tags[tagNameElem] = obj.tags[tagNameElem] + 1;
+      } else {
+        obj.tags[tagNameElem] = 1;
+      }
+      
       for( let a = 0; a < root.childNodes[i].classList.length; a++){
-        let className = root.childNodes[i].classList[a];
-        obj.classes[className];
-        obj.classes.classesCounter += 1;
+        if (root.childNodes[i].classList.length > 0){
+          let classNames = root.childNodes[i].classList[a];
+          obj.classes[classNames] = obj.classes[classNames] + 1;
+        } else {
+          obj.classes[classNames] = 1;
+        } 
       }
-
-    } else if (root.childNodes[i].nodeName !== undefined ){
-          obj.tags.tagsNames.tagName;
-          obj.tags.tagsCounter += 1;
-        }
+        collect(root.childNodes[i]);
       }
-    return obj;  
+    }   
+        //collect(root);
+      return obj;
     }
+  }
+  
   
   
   
