@@ -102,7 +102,7 @@ function addListeners(div) {
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
 addDivButton.addEventListener('click', function() {
-  const onBuutonClick = function(){
+  const onButtonClick = function(){
     // создать новый div
     const div = createDiv();
 
@@ -113,7 +113,7 @@ addDivButton.addEventListener('click', function() {
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
   }
-    
+    addDivButton.addEventListener('click', onButtonClick);
 });
 
 export {
