@@ -81,19 +81,16 @@ function addListeners(div) {
 
 
   const mousedownEvent = function (e){
-    console.log(e);
     div.addEventListener('mousemove', mousemoveEvent);
     div.addEventListener('mouseup', mouseupEvent);
   }
   
   const mousemoveEvent = function(e){
-    //console.log(e)
     div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
     div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
   }
 
   const mouseupEvent = function(e){
-    //console.log(e)
     div.removeEventListener('mousemove', mousemoveEvent);
     div.removeEventListener('mouseup', mouseupEvent);
   }
