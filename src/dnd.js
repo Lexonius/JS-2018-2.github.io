@@ -78,27 +78,35 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(div) {
-  document.getElementsByClassName('draggable-div')
-  //console.log(document.getElementsByClassName('draggable-div'));
-  div.addEventListener('mousedown', onButtonClick)
-    console.log(1)
-    moveAt(e);
-  }
 
+
+  const mousedownEvent = function (e){
+    console.log(e);Ы
+    document.getElementsByClassName('draggable-div');
+    mousemoveEvent(e);
+  }
   
-  function moveAt(e) {
-    div.addEventListener('mousemove', onButtonClick);
-      console.log('2')
-      div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
-      div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
+  const mousemoveEvent = function(e){
+    //console.log(e)
+    div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
+    div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
   }
 
-  div.addEventListener('mouseup', onButtonClick);
+  const mouseupEvent = function(e){
+    //console.log(e)
+    div.removeEventListener('mousemove', mousemoveEvent);
+    div.removeEventListener('mouseup', mouseupEvent);
+  }
+
+  div.addEventListener('mousedown', mousedownEvent);
+  div.addEventListener('mousemove', mousemoveEvent);
+  div.addEventListener('mouseup', mouseupEvent);
+
+
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
-addDivButton.addEventListener('click', function() {
   const onButtonClick = function(){
     // создать новый div
     const div = createDiv();
@@ -111,7 +119,6 @@ addDivButton.addEventListener('click', function() {
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
   }
     addDivButton.addEventListener('click', onButtonClick);
-});
 
 export {
     createDiv
