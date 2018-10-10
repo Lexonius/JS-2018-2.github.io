@@ -91,7 +91,7 @@ function addListeners(div) {
       console.log('2')
       div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
       div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
-    })
+    }) 
   }
 
   div.addEventListener('mouseup', function(e) {
@@ -102,6 +102,7 @@ function addListeners(div) {
 let addDivButton = homeworkContainer.querySelector('#addDiv');
 
 addDivButton.addEventListener('click', function() {
+  const onBuutonClick = function(){
     // создать новый div
     const div = createDiv();
 
@@ -111,6 +112,8 @@ addDivButton.addEventListener('click', function() {
     addListeners(div);
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
+  }
+    
 });
 
 export {
