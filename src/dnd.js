@@ -81,9 +81,9 @@ function addListeners(div) {
 
 
   const mousedownEvent = function (e){
-    console.log(e);Ы
-    document.getElementsByClassName('draggable-div');
-    mousemoveEvent(e);
+    console.log(e);
+    div.addEventListener('mousemove', mousemoveEvent);
+    div.addEventListener('mouseup', mouseupEvent);
   }
   
   const mousemoveEvent = function(e){
@@ -99,8 +99,7 @@ function addListeners(div) {
   }
 
   div.addEventListener('mousedown', mousedownEvent);
-  div.addEventListener('mousemove', mousemoveEvent);
-  div.addEventListener('mouseup', mouseupEvent);
+  
 
 
 }
