@@ -31,12 +31,11 @@ const homeworkContainer = document.querySelector('#homework-container');
 function createDiv() {
     let elem = document.createElement('div');
     elem.className = "draggable-div";
-    elem.id = 'block'
     elem.style.width = widthGenerate();
     elem.style.height = heightGenerate();
     elem.style.backgroundColor = colorGenerate();
     //elem.setAttribute('draggable', 'true');
-    // elem.style.position = 'absolute';
+    elem.style.position = 'relative';
     elem.style.left = positionHorizontal();
     elem.style.top = positionVertical();
     return elem;
@@ -78,29 +77,26 @@ function createDiv() {
    homeworkContainer.appendChild(newDiv);
    addListeners(newDiv);
  */
-function addListeners(target) {
-  let elem;
-  let elemsDrugAndDrop = target;
-  document.onmousedown = function(e){
-    document.body.appendChild(elemsDrugAndDrop);
-  }
-  function moveAt(e) {
-    elemsDrugAndDrop.style.left = e.pageX - elemsDrugAndDrop.offsetWidth / 2 + 'px';
-    elemsDrugAndDrop.style.top = e.pageY - elemsDrugAndDrop.offsetHeight / 2 + 'px';
-  }
-  document.onmousemove = function(e) {
+function addListeners(div) {
+  document.getElementsByClassName('draggable-div')
+  //console.log(document.getElementsByClassName('draggable-div'));
+  div.addEventListener('mousedown',function (e){
+    console.log(1)
     moveAt(e);
+  })
+
+  
+  function moveAt(e) {
+    div.addEventListener('mousemove', function(e){
+      console.log('2')
+      div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
+      div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
+    })
   }
 
-  document.onmouseup = function() {
-    document.onmousemove = null;
-    elemsDrugAndDrop.onmouseup = null;
-  }
-
-  elemsDrugAndDrop.ondragstart = function() {
-    return false;
-  };
-
+  div.addEventListener('mouseup', function(e) {
+    console.log('3')
+  })
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
