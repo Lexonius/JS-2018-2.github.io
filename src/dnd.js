@@ -31,11 +31,10 @@ const homeworkContainer = document.querySelector('#homework-container');
 function createDiv() {
     let elem = document.createElement('div');
     elem.className = "draggable-div";
-    elem.style.width = widthGenerate();
-    elem.style.height = heightGenerate();
+    elem.style.width = lengthGenerate();
+    elem.style.height = lengthGenerate();
     elem.style.backgroundColor = colorGenerate();
-    //elem.setAttribute('draggable', 'true');
-    elem.style.position = 'relative';
+    elem.style.position = 'absolute';
     elem.style.left = positionHorizontal();
     elem.style.top = positionVertical();
     return elem;
@@ -49,14 +48,9 @@ function createDiv() {
     return `rgb(${a}, ${b}, ${c})`;
   }
 
-  function widthGenerate() {
+  function lengthGenerate() {
     let d = parseInt(Math.random()*450);
     return `${d}px`
-  }
-
-  function heightGenerate() {
-    let e = parseInt(Math.random()*450);
-    return `${e}px`
   }
 
   function positionHorizontal(){
@@ -78,7 +72,28 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(div) {
+  // let lkIsDown = false;
 
+
+  // div.addEventListener('mousedown', function(e) {
+  //   lkIsDown = true;
+  // });
+
+  // div.addEventListener('mouseup', function(e) {
+  //   lkIsDown = false;
+  // });
+
+  // div.addEventListener('mousemove', function(e){
+   
+  //   if (lkIsDown) {
+  //     div.style.zIndex = 10
+  //     div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
+  //     div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
+  //   } else {
+  //     div.style.zIndex = 0
+  //   }
+
+  // })
 
   const mousedownEvent = function (e){
     div.addEventListener('mousemove', mousemoveEvent);
@@ -86,6 +101,7 @@ function addListeners(div) {
   }
   
   const mousemoveEvent = function(e){
+    mousedownEvent(e);
     div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
     div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
   }
@@ -96,8 +112,6 @@ function addListeners(div) {
   }
 
   div.addEventListener('mousedown', mousedownEvent);
-  
-
 
 }
 
