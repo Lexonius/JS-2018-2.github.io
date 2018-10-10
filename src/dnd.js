@@ -80,23 +80,20 @@ function createDiv() {
 function addListeners(div) {
   document.getElementsByClassName('draggable-div')
   //console.log(document.getElementsByClassName('draggable-div'));
-  div.addEventListener('mousedown',function (e){
+  div.addEventListener('mousedown', onButtonClick)
     console.log(1)
     moveAt(e);
-  })
+  }
 
   
   function moveAt(e) {
-    div.addEventListener('mousemove', function(e){
+    div.addEventListener('mousemove', onButtonClick);
       console.log('2')
       div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
       div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
-    }) 
   }
 
-  div.addEventListener('mouseup', function(e) {
-    console.log('3')
-  })
+  div.addEventListener('mouseup', onButtonClick);
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
