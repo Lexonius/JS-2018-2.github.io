@@ -72,46 +72,44 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(div) {
-  // let lkIsDown = false;
 
+  div.onmousedown = function(e) {
 
-  // div.addEventListener('mousedown', function(e) {
-  //   lkIsDown = true;
-  // });
+    var coords = getCoords(div);
+    var shiftX = e.pageX - coords.left;
+    var shiftY = e.pageY - coords.top;
 
-  // div.addEventListener('mouseup', function(e) {
-  //   lkIsDown = false;
-  // });
-
-  // div.addEventListener('mousemove', function(e){
-   
-  //   if (lkIsDown) {
-  //     div.style.zIndex = 10
-  //     div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
-  //     div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
-  //   } else {
-  //     div.style.zIndex = 0
-  //   }
-
-  // })
-
-  const mousedownEvent = function (e){
-    div.addEventListener('mousemove', mousemoveEvent);
-    div.addEventListener('mouseup', mouseupEvent);
+    moveAt(e);
+  
+    div.style.zIndex = 1000; // над другими элементами
+  
+    function moveAt(e) {
+      div.style.left = e.pageX - shiftX + 'px';
+      div.style.top = e.pageY - shiftY + 'px';
+    }
+  
+    document.onmousemove = function(e) {
+      moveAt(e);
+    };
+  
+    div.onmouseup = function() {
+      document.onmousemove = null;
+      div.onmouseup = null;
+    };
+  
   }
   
-  const mousemoveEvent = function(e){
-    mousedownEvent(e);
-    div.style.left = e.pageX - div.offsetWidth / 2 + 'px';
-    div.style.top = e.pageY - div.offsetHeight / 2 + 'px';
+  div.ondragstart = function() {
+    return false;
+  };
+  
+  function getCoords(elem) {   // кроме IE8-
+    var box = elem.getBoundingClientRect();
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
   }
-
-  const mouseupEvent = function(e){
-    div.removeEventListener('mousemove', mousemoveEvent);
-    div.removeEventListener('mouseup', mouseupEvent);
-  }
-
-  div.addEventListener('mousedown', mousedownEvent);
 
 }
 
