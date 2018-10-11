@@ -9,7 +9,15 @@
    delayPromise(3) // вернет promise, который будет разрешен через 3 секунды
  */
 function delayPromise(seconds) {
+  //console.log(seconds)
+  return new Promise (function (resolve, reject) {
+    setTimeout (() => {
+      resolve();
+    }, seconds)
+    
+  })
 }
+ 
 
 /*
  Задание 2:
@@ -25,6 +33,7 @@ function delayPromise(seconds) {
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
 function loadAndSortTowns() {
+  
 }
 
 export {
