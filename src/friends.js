@@ -4,9 +4,11 @@ import renderFn from './templates/template.hbs'
 
     let leftListArray = [];
     let rightListArray = [];
-
+    
     const friendsListLeft = document.querySelector('.friends__list-left');
     const friendsListRight = document.querySelector('.friends__list-right');
+    let filterInputLeft = document.querySelector('#search_left')
+    let filterInputRight = document.querySelector('#search_right')
     VK.init({
         apiId: 6502079
     });
@@ -32,7 +34,9 @@ import renderFn from './templates/template.hbs'
                 if (data.error) {
                     reject (data.error);
                 } else {
+                    // на данном этапе получили массив с друзьями
                     resolve(data.response)
+                    console.log(data.response)
                 }
             });
         })
@@ -46,117 +50,111 @@ import renderFn from './templates/template.hbs'
     .then(([me]) => {
         const headerInfo = document.querySelector('.header__title');
         headerInfo.textContent = `Друзья на странице ${me.first_name} ${me.last_name}`;
-
         return callAPI('friends.get', {fields: 'photo_100'});
     })
     .then(friends => {
-        // const template = document.querySelector('.friends__list').textContent
-        // console.log(friends);
-        // let friendsArr = friends;
-        const leftListHtml = renderFn ({ my_friends: friends.items, isLeft: true });
-        // console.log(leftListHtml);
-        
-        const rightListHtml = renderFn ({ my_friends: friends.items, ifLeft: false });
-        // console.log(friends.items)
-        
-        // console.log(html)
-        friendsListLeft.innerHTML = leftListHtml;
-        
-        
-        // const buttonRemove = document.querySelector('.remove_friend');
-        // const leftList = document.querySelector('.left');
-        const rightList = document.querySelector('.right');
-        const friendsList = document.querySelector('.friends__list');
-        const friend = document.querySelector('.friend');
-        // console.log(friend)
+        // проврка: если друзья есть и в левом и в правом списке, то я их кладу в свои массивы, если их нет, то я беру friends.items и кладу в левый список, в правый пустой массив
+        if(localStorage.getItem('store')){
+            let friendsParse = JSON.parse(localStorage.getItem('store'))
+            alert("nice")
+            console.log(friendsParse)
+            leftListArray = friendsParse.leftList;
+            rightListArray = friendsParse.rightList;
+            console.log(leftListArray)
+            console.log(rightListArray)
+            renderFriendsListLeft();
+            renderFriendsListRight();
+        } else {
+            leftListArray = friends.items;
+            rightListArray = [];
+            renderFriendsListLeft();
+            renderFriendsListRight();
+        }
         
         leftListArray = friends.items;
-        // console.log(leftListArray)
-
+        
+        // по нажатию на кнопку внутри контейнера, выполняется поиск элемента, внутри которого лежит кнопка, после чего элемент переносится
+        // в правый контейнер и удаляется из левого
         friendsListLeft.addEventListener('click', (e) => {
+            // смотрим, на какой элемент приходится клик
             let targetButton = e.target;
-            // console.log(targetButton)
+            // если клик пришелся не на изображение кнопки, то
             if(targetButton.tagName !== 'IMG'){
+                //завершаем работу функции
                 return
             } else {
+                //определяем id у кнопки
                 let id = targetButton.getAttribute('data-id')
-                // console.log(id)
-                // console.log(leftListArray);
+                //выявляем индекс элмента через id, на которую пришелся клик (обрати внимание на то, что id приходит числом, а нужен строкой)
                 const friendIndex = leftListArray.findIndex((friend => friend.id === Number(id)))
+                //пушим в правый массив элемент с индексом, который нам вернул findIndex
                 rightListArray.push(leftListArray[friendIndex])
+                //вырезаем элемент с полученным выше индексом
                 leftListArray.splice(friendIndex, 1);
-                const leftListHtml = renderFn ({ my_friends: leftListArray, isLeft: true });
-                const rightListHtml = renderFn ({ my_friends: rightListArray, isLeft: false });
-                friendsListLeft.innerHTML = leftListHtml;
-                friendsListRight.innerHTML = rightListHtml;
-                // console.log(rightListArray);
+                //заново отрисовываем отфильтрованные массивы
+                renderFriendsListLeft();
+                renderFriendsListRight();
             }
         })
-
+        // по нажатию на кнопку внутри контейнера, выполняется поиск элемента, внутри которого лежит кнопка, после чего элемент переносится
+        // в левый контейнер и удаляется из правого (логику работы смотри выше)
         friendsListRight.addEventListener('click', (e) => {
-            // console.log(friendsListRight)
             let targetButton = e.target;
-            // console.log(targetButton)
-            // console.log(targetButton)
             if(targetButton.tagName !== 'IMG'){
                 return
             } else {
                 let id = targetButton.getAttribute('data-id')
-                // console.log(id)
-                // console.log(leftListArray);
                 const friendIndex = rightListArray.findIndex((friend => friend.id === Number(id)))
-                // console.log(friendIndex);
-                
                 leftListArray.push(rightListArray[friendIndex])
                 rightListArray.splice(friendIndex, 1)
-                
-                const rightListHtml = renderFn ({ my_friends: rightListArray, isLeft: false });
-                const leftListHtml = renderFn ({ my_friends: leftListArray, isLeft: true });
-                friendsListRight.innerHTML = rightListHtml;
-                friendsListLeft.innerHTML = leftListHtml;
-                // console.log(rightListArray);
+                renderFriendsListLeft();
+                renderFriendsListRight();
             }
         })
 
-        let filterInputLeft = document.querySelector('#search_left')
-        let filterInputRight = document.querySelector('#search_right')
+        
+        //создаем пустой массив, в который кладем первоначальный массив. Получается массив, изменив который мы не затронем первоначальный массив.
         let filterFriendsLeftArr = [];
         filterFriendsLeftArr = leftListArray;
         let filterFriendsRightArr = [];
         filterFriendsRightArr = rightListArray;
 
+        // по нажатию на клавишу в поле ввода вызывается функция по отрисовке левого списка
         filterInputLeft.addEventListener('keyup',() => {
             renderFriendsListLeft();
         })
+
+        // по нажатию на клавишу в поле ввода вызывается функция по отрисовке правого списка
         filterInputRight.addEventListener('keyup',() => {
             renderFriendsListRight();
         })
 
+        // функция по рендерингу левого списка друзей
         function renderFriendsListLeft(){
+            // если в левое поле ввода есть значения
             if(filterInputLeft.value){
-                filterFriendsLeftArr = leftListArray.filter((item) => isMatching (item.first_name, filterInputLeft.value) || isMatching(item.last_name, filterInputLeft.value))
-            } 
-            else {
+                // то фильтруем массив с друзьями из левого списка (по имени, фамилии)
+                filterFriendsLeftArr = leftListArray.filter((item) => isMatching (item.first_name + " " + item.last_name, filterInputLeft.value))
+            } else {
+                //если поле ввода пустое, то на отрисовку отдаем неизмененный первоначальный массив
                 filterFriendsLeftArr = leftListArray;
             }
-            // }
             const leftListHtml = renderFn ({ my_friends: filterFriendsLeftArr, isLeft: true });
             friendsListLeft.innerHTML = leftListHtml;
-            renderFilterFriendLeft()
         }
 
+        //функция по рендерингу правого списка друзей (смотри выше)
         function renderFriendsListRight(){
-                if(filterInputRight.value){
-                    filterFriendsRightArr = rightListArray .filter((item) => isMatching (item.first_name, filterInputRight.value) || isMatching(item.last_name, filterInputRight.value))
-
-                } else {
-                    filterFriendsRightArr = rightListArray;
-                }
+            if(filterInputRight.value){
+                filterFriendsRightArr = rightListArray.filter((item) => isMatching (item.first_name + " " + item.last_name, filterInputRight.value))
+            } else {
+                filterFriendsRightArr = rightListArray;
+            }
             const rightListHtml = renderFn ({ my_friends: filterFriendsRightArr, isLeft: false });
             friendsListRight.innerHTML = rightListHtml;
             
         }
-
+        // функция по проверке подстроки в строке
         function isMatching(full, chunk) {
             if(full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1){
               return true;
@@ -164,26 +162,18 @@ import renderFn from './templates/template.hbs'
               return false;
             }
           }
-
-        function renderFilterFriendLeft() {
-            for(let i = 0; i < filterFriendsLeftArr.length; i++){
-                console.log(filterFriendsLeftArr[i].first_name)
-                
-            }
-        }
+        let storage = localStorage;
+            //сохранение данных в LocalStorage
+            const buttonSave = document.querySelector('.footer_submit');
+            buttonSave.addEventListener('click',() =>{
+                localStorage.setItem('store', JSON.stringify({
+                    leftList: filterFriendsLeftArr,
+                    rightList:filterFriendsRightArr
+                }))
+                alert('Data OK')
+            })
+            
         
-        // function save(){
-        //     let storage = localStorage;
-        //     console.log(storage)
-        //     let buttonSave = document.querySelector('.footer_submit');
-        //     console.log(buttonSave)
-        //     buttonSave.addEventListener('click',() =>{
-        //         localStorage.setItem('friendsListLeft', JSON.stringify(filterFriendsLeftArr))
-        //         localStorage.setItem('friendsListRight', JSON.stringify(filterFriendsRightArr))
-        //     })
-        // }
-        // save()
-
 
 
 
