@@ -1,0 +1,21 @@
+    {{#each my_friends}}
+        <li class="friend" draggable="true" >
+            <img src='{{photo_100}}' class="avatar_img">
+            <div>{{first_name}} {{last_name}}</div>
+            {{#if ../isLeft}}
+                    <img src="../../IMG/add.png" data-id="{{id}}" class="add_friend">
+            {{else}}
+                <div class="remove_friend"> 
+                    <img src="../../IMG/remove.png" data-id="{{id}}">
+                </div>
+            {{/if}}
+            <ul>
+            {{#each friends.items}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+            </ul>
+            
+        </li>
+    {{/each}}
