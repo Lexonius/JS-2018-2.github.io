@@ -1,180 +1,69 @@
 .background_wrapper{
-    background-color: #999999;
+    background-color: #ffffff;
     justify-content: center;
     display: flex;
-    height: 1073px;
+    height: 100%;
 }
 .background_container{
     display: flex;
     flex-direction: column;
-    width: 55%;
+    justify-content: space-between;
+    width: 70%;
     margin-top: 3%;
 
 }
-.logo_wrapper{
+.form{
     display: flex;
-    justify-content: center;
-    margin-bottom: 2%;
-    
-}
-/* .filter_wrapper{
-} */
-.header {
-    background-color: #ff8663;
-    height: 45px;
-    align-items: center;
-    display: flex;
+    flex-direction: row;
     justify-content: space-between;
-    border-radius: 10px 10px 0 0;
 }
-.header__title{
-    margin-left: 1%;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #ffffff;
+.input_name{
+    width: 45%;
+    height: 30px;
 }
-.header_button{
-    margin-right: 2%;
+.input_comment{
+    width: 45%;
+    height: 30px;
 }
-.filter_search{
-    background-color: #f0f0f0;
-    height: 60px;
-    display: flex;
-    justify-content: space-around;
+.button__add{
 
 }
-.search_input{
-    width: 40%;
-    height: 45%;
-    border-radius: 20px;
-    margin-top: 1.5%;
-    border: 0;
-    outline-style: none;
+.comments_block{
+    border: 1px solid black;
+    height: 700px;
 }
-.filter__content-column{
-    background-color: #ffffff;
-    flex-direction: row;
-    display: flex;
-    justify-content: space-between;
-}
-.filter__content-column--left{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-}
-.filter_title{
-    text-align: center;
-    margin-top: 2%;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #4f4f4f
-}
-.friends{
+.comments_list{
     list-style: none;
     padding: 0;
     margin: 0;
-    overflow-y: scroll;
-    height: 600px; /* высота нашего блока */
-    border: none;
 }
-.friends__list-right{
-    height: 100%;
+.center {
+    width: 100%;
 }
-::-webkit-scrollbar-button {
-    /* background-image:url(''); */
-    background-repeat:no-repeat;
-    width:5px;
-    height:0px
-    }
-    
-    ::-webkit-scrollbar-track {
-    background-color:#ffffff
-    }
-    
-    ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background-color:#c4c4c4;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover{
-    background-color:#c4c4c4    ;
-    }
-    
-    ::-webkit-resizer{
-    /* background-image:url(''); */
-    background-repeat:no-repeat;
-    width:4px;
-    height:0px
-    }
-    
-    ::-webkit-scrollbar{
-    width: 4px;
-    }
-.friend{
+.comment{
+    margin: 0;
+}
+.form_wrapper {
+    height: 10%;
+}
+.rewiewer{
     display: flex;
-    align-items: center;
-    justify-content: space-around;
-    cursor: pointer;
-}
-.name{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.active{
-    background-color: #f0f0f0;
-}
-.filter__content-column--right{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 .avatar_img{
-    border-radius: 50%;
-    overflow: hidden;
-    object-fit: cover;
-    margin-left: 5%;
-    margin-top: 5%;
-    /* width: 70%; */
+    width: 100px;
 }
-.list_button{
-    margin-right: 4%;
-}
-.footer{
-    background-color: #f0f0f0;
+.top{
     display: flex;
-    justify-content: flex-end;
-    height: 46px;
-    border-radius: 0 0 10px 10px;
+    flex-direction: row;
+}
+.right{
+    width: 20%;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    
+
 }
-.footer_submit{
-    border-radius: 10px;
-    border: 0;
-    outline-style: none;
-    height: 30px;
-    margin-right: 2%;
-    background-color: #ff8663;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: #ffffff;
-}
-.button_add {
-    background: url('/IMG/add.png') no-repeat;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-.button_remove {
-    background: url('/IMG/remove.png') no-repeat;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-}
-.friends__list-left{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-.friends__list-right{
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.remove__button{
+    width: 130%;
 }
