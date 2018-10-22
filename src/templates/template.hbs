@@ -3,10 +3,10 @@
             <img src='{{photo_100}}' class="avatar_img">
             <div>{{first_name}} {{last_name}}</div>
             {{#if ../isLeft}}
-                    <img src="../../IMG/add.png" data-id="{{id}}" class="add_friend">
+                    <img src="../../IMG/add.png" data-id="{{id}}" draggable="false">
             {{else}}
                 <div class="remove_friend"> 
-                    <img src="../../IMG/remove.png" data-id="{{id}}">
+                    <img src="../../IMG/remove.png" data-id="{{id}}" draggable="false">
                 </div>
             {{/if}}
             <ul>
@@ -16,6 +16,5 @@
                 </li>
             {{/each}}
             </ul>
-            
         </li>
     {{/each}}

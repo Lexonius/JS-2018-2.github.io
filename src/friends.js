@@ -9,6 +9,7 @@ import renderFn from './templates/template.hbs'
     const friendsListRight = document.querySelector('.friends__list-right');
     let filterInputLeft = document.querySelector('#search_left')
     let filterInputRight = document.querySelector('#search_right')
+
     VK.init({
         apiId: 6502079
     });
@@ -57,11 +58,8 @@ import renderFn from './templates/template.hbs'
         if(localStorage.getItem('store')){
             let friendsParse = JSON.parse(localStorage.getItem('store'))
             alert("nice")
-            console.log(friendsParse)
             leftListArray = friendsParse.leftList;
             rightListArray = friendsParse.rightList;
-            console.log(leftListArray)
-            console.log(rightListArray)
             renderFriendsListLeft();
             renderFriendsListRight();
         } else {
@@ -104,7 +102,7 @@ import renderFn from './templates/template.hbs'
                 return
             } else {
                 let id = targetButton.getAttribute('data-id')
-                const friendIndex = rightListArray.findIndex((friend => friend.id === Number(id)))
+                const friendIndex = rightListArray.findIndex ((friend => friend.id === Number(id)))
                 leftListArray.push(rightListArray[friendIndex])
                 rightListArray.splice(friendIndex, 1)
                 renderFriendsListLeft();
@@ -162,6 +160,8 @@ import renderFn from './templates/template.hbs'
               return false;
             }
           }
+         
+
         let storage = localStorage;
             //сохранение данных в LocalStorage
             const buttonSave = document.querySelector('.footer_submit');
@@ -172,25 +172,53 @@ import renderFn from './templates/template.hbs'
                 }))
                 alert('Data OK')
             })
-            
+
+            // Drag and drop
+    let friendsElem = document.querySelector('.friends') 
+    let friendElem = document.querySelector('.friend')
+    
+    console.log(friendElem)
+
+    friendsElem.addEventListener('dragenter', dragEnter, false)
+    friendElem.addEventListener('dragstart', dragStart, false)
+    friendsListRight.addEventListener('dragover', dragOver, false)
+    friendsListRight.addEventListener('drop', dragDrop, false)
+
+    friendsElem.addEventListener('dragenter', dragEnter, false)
+    friendsElem.addEventListener('dragstart', dragStart, false)
+    friendsListLeft.addEventListener('dragover', dragOver, false)
+    friendsListLeft.addEventListener('drop', dragDrop, false)
+
+    function dragStart(event){
+        event.dataTransfer.effectAllowed='move';
+        console.log('1');
+        event.dataTransfer.setData ("text", event.target.getAttribute('id'));   
+        event.dataTransfer.setDragImage (event.target,100,100);
+        return true;
+    }
+
+    function dragEnter(event) {
+        event.preventDefault();
+        console.log('2')
+        return true;
+        }
+
+    function dragOver(event) {
+        console.log('3');
+        event.preventDefault();
+    }
+
+    function dragDrop(event) {
+
         
-
-
-
-
-
-
+        console.log('4');
+    }
 
     })
 
+    
 
-
-
-    // function dragStart(event){
-    //     event.dataTransfer.effectAllowed='move';
-
-    // }
-    // dragStart();
+   
 
     
     

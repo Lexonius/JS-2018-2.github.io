@@ -75,7 +75,7 @@
     height: 600px; /* высота нашего блока */
     border: none;
 }
-.friends_right{
+.friends__list-right{
     height: 100%;
 }
 ::-webkit-scrollbar-button {
