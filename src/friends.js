@@ -126,102 +126,125 @@ let nameInput = document.querySelector('.input_name')
 let commentInput = document.querySelector('.input_comment')
 let addButton = document.querySelector('.button__add')
 
+
 addButton.addEventListener('click',() => {
-    if(nameInput.value || commentInput.value){
-        getComments()
-    } else {
+    if(!nameInput.value || !commentInput.value){
         return
+    } else if(nameInput.value !== ' '|| commentInput.value !== ' '){
+        getComments()
     }
 })
 
 function getComments(){
-
     let avatarImg = document.createElement('img')
     avatarImg.setAttribute ('src', './IMG/usuario.jpeg')
     avatarImg.setAttribute ('class', 'avatar_img')
     // console.log(avatarImg);
+    let nameCommentator = nameInput.value;
+    let comment = commentInput.value;
+    
     let removeButton = document.createElement('img')
     removeButton.setAttribute ('src', './IMG/remove.png')
     removeButton.setAttribute ('class', 'remove__button-img')
+    let generateId = Math.floor(Math.random() * 1001)
+    removeButton.setAttribute ('data-id', `${generateId}`)
     // console.log(removeButton)
-    let nameRewiewer = nameInput.value;
-    let comment = commentInput.value;
+    
+    let now = new Date;
     let commentsArr = [];
     let commentObj = {
         avatar: avatarImg,
-        name: nameRewiewer,
+        name: nameCommentator,
+        date: {
+            weekDay: now.getDate(),
+            month: now.getMonth(),
+            year: now.getFullYear(),
+            hour: now. getHours(),
+            minutes: now.getMinutes()
+        },                                                                                                                                          
         comment: comment,
         remove: removeButton,
+        id: generateId
     }
-    
+    // console.log(commentObj.id)
     commentsArr.push(commentObj);
     renderComments(commentsArr)
 }
 
 function renderComments(commentsArr){
+    nameInput.value = " ",
+    commentInput.value = " ";
     let commentsList = document.querySelector('.comments_list')
 
-    let rewiewer = document.createElement('li')
-    rewiewer.setAttribute('class', 'rewiewer')
-    commentsList.appendChild(rewiewer)
+    let comment = document.createElement('li')
+    comment.setAttribute('class', 'rewiewer')
+    commentsList.appendChild(comment)
 
-    let rewiewerLeftElem = document.createElement('div')
-    rewiewerLeftElem.setAttribute('class', 'left')
-    rewiewer.appendChild(rewiewerLeftElem)
+    let commentLeftElem = document.createElement('div')
+    commentLeftElem.setAttribute('class', 'left')
+    comment.appendChild(commentLeftElem)
 
-    let rewiewerCenter = document.createElement('div')
-    rewiewerCenter.setAttribute('class', 'center')
-    rewiewer.appendChild(rewiewerCenter)
+    let commentCenterElem = document.createElement('div')
+    commentCenterElem.setAttribute('class', 'center')
+    comment.appendChild(commentCenterElem)
 
-    let rewiewerCenterTop = document.createElement('div')
-    rewiewerCenterTop.setAttribute('class', 'top')
-    rewiewerCenter.appendChild(rewiewerCenterTop)
+    let commentCenterTop = document.createElement('div')
+    commentCenterTop.setAttribute('class', 'top')
+    commentCenterElem.appendChild(commentCenterTop)
 
+    
     //НЕ ЗАБУДЬ ВСТАВИТЬ ДАТУ!!!
     //НЕ ЗАБУДЬ ПОПРАВИТЬ КЛАССЫ!!!!
 
-    let rewiewerCenterBottom = document.createElement('div')
-    rewiewerCenterBottom.setAttribute('class', 'bottom')
-    rewiewerCenter.appendChild(rewiewerCenterBottom)
+    let commentCenterBottom = document.createElement('div')
+    commentCenterBottom.setAttribute('class', 'bottom')
+    commentCenterElem.appendChild(commentCenterBottom)
 
     let commentElemRight = document.createElement('div')
     commentElemRight.setAttribute('class', 'right')
-    rewiewer.appendChild(commentElemRight)
+    comment.appendChild(commentElemRight)
     
     commentsArr.forEach(item => {
 
         let commentsElem = item;
-        console.log(commentsElem.name)
-        rewiewerLeftElem.appendChild(commentsElem.avatar)
+        console.log(commentsElem)
+        commentLeftElem.appendChild(commentsElem.avatar)
 
         let commentatorName = document.createElement('p')
         commentatorName.innerHTML = commentsElem.name
         commentatorName.setAttribute('class', 'name')
-        rewiewerCenterTop.appendChild(commentatorName)
+        commentCenterTop.appendChild(commentatorName)
 
+        let nowDate = document.createElement('p')
+        nowDate.setAttribute('class', 'date')
+        let dataComment = `${item.date.weekDay}.${item.date.month}.${item.date.year} ${item.date.hour}:${item.date.minutes}`
+        nowDate.innerHTML = dataComment
+        commentCenterTop.appendChild(nowDate)
+        
         let comment = document.createElement('p')
         comment.innerHTML = commentsElem.comment
         comment.setAttribute('class', 'comment')
-        rewiewerCenterBottom.appendChild(comment)
+        commentCenterBottom.appendChild(comment)
 
         let removeComment = commentsElem.remove
-        commentElemRight.appendChild(removeComment)
-        
-        commentsList.addEventListener('click', (e) =>{
-            let targetButton = e.target;
-            console.log(targetButton);
-            if(targetButton.className !== 'remove__button-img'){
-                return
-            } else {
-                
-            }            
-        })
-
+        commentElemRight.appendChild(removeComment) 
     });
-     
-
+    console.log(commentsArr)
+    commentsList.addEventListener('click', (e) =>{
+        let targetButton = e.target;
+        // console.log(targetButton);
+        if(targetButton.className !== 'remove__button-img'){
+            return
+        } else {
+            let id = targetButton.getAttribute('data-id')
+            console.log(id)
+            
+            const commentIndex = commentsArr.findIndex((a => a.id === Number(id)))
+            console.log(commentIndex)
+        }            
+    })
+    
 }
-
 
 let buttonSave = document.querySelector('.save__button')
 buttonSave.addEventListener('click',() => {
