@@ -145,12 +145,26 @@ let commentList = document.querySelector('.comments_list')
 
 
 addButton.addEventListener('click',() => {
-    if( !nameInput.value || !commentInput.value){
+    if( !nameInput.value && !commentInput.value){
+        console.log('14')
         return
-    } else if(nameInput.value !== ' '|| commentInput.value !== ' '){
+    } else if(nameInput.value !== ' ' && commentInput.value !== ' '){
+        // nameInput.style.border = "3px solid #6BCBB6"
+        // commentInput.style.border = "3px solid #6BCBB6"
         getComments()
         // renderComments()
+    } else if(nameInput.value === ' ' && commentInput.value === ' '){
+        console.log('14')
+        nameInput.style.border = "3px solid #BE4F4F"
+        commentInput.style.border = "3px solid #BE4F4F"
+        // nameInput.style.border = "3px solid #6BCBB6"
     }
+})
+nameInput.addEventListener('keydown',() =>{
+    nameInput.style.border = "3px solid #6BCBB6"
+})
+commentInput.addEventListener('keydown',() =>{
+    commentInput.style.border = "3px solid #6BCBB6"
 })
 addButton.addEventListener('mouseover',() => {
     console.log('5')
@@ -204,6 +218,8 @@ function renderComments(){
     commentList.innerHTML = comment
     
 }
+let comment = document.querySelector('.comment')
+// console.log(buttonRemove)
 
 commentList.addEventListener('click', (e) =>{
     let targetButton = e.target;

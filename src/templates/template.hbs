@@ -5,11 +5,11 @@
             </div>
             <div class="center">
                 <div class="top">
-                    <p class="name"> {{name}} </p>
-                       <p class="date"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
+                    <p class="name elem__text"> {{name}} </p>
+                       <p class="date elem__text"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
                 </div>
                 <div class="bottom">
-                    <p class="comment">
+                    <p class="comment elem__text">
                         {{comment}}
                     </p>
                 </div>
@@ -18,5 +18,5 @@
                     <img src="./IMG/remove.png" class="remove__button-img" id = {{remove}}> 
             </div>
         </li>
-        <hr color='black' size='1px'>
+        <hr size='1px' color='#aaa'>
     {{/each}}
