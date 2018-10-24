@@ -1,6 +1,6 @@
 import './styles/styles.css';
 // // import { auth } from './utils'
-
+import renderFn from './templates/template.hbs'
 
 //         // проврка: если друзья есть и в левом и в правом списке, то я их кладу в свои массивы, если их нет, то я беру friends.items и кладу в левый список, в правый пустой массив
 //         if(localStorage.getItem('store')){
@@ -120,40 +120,65 @@ import './styles/styles.css';
 //                 alert('Data OK')
 //             })
 
-
-
+// проврка: если друзья есть и в левом и в правом списке, то я их кладу в свои массивы, если их нет, то я беру friends.items и кладу в левый список, в правый пустой массив
 let nameInput = document.querySelector('.input_name')
 let commentInput = document.querySelector('.input_comment')
 let addButton = document.querySelector('.button__add')
+let buttonSave = document.querySelector('.button-save')
+let commentsArr = [];
+let commentList = document.querySelector('.comments_list')
+
+
+        if(localStorage.getItem('store')){
+            let commentParse = JSON.parse(localStorage.getItem('store'))
+            // alert("nice")
+            commentsArr = commentParse.commList;
+            // console.log(commentsArr)
+            renderComments(commentsArr)
+        } else {
+            commentsArr = []
+            renderComments()
+        }
+
+
+
 
 
 addButton.addEventListener('click',() => {
-    if(!nameInput.value || !commentInput.value){
+    if( !nameInput.value || !commentInput.value){
         return
     } else if(nameInput.value !== ' '|| commentInput.value !== ' '){
         getComments()
+        // renderComments()
     }
 })
+addButton.addEventListener('mouseover',() => {
+    console.log('5')
+    addButton.style.background = '#53BBA8';
+})
+
+addButton.addEventListener('mouseout',() => {
+    console.log('6')
+    addButton.style.background = '#6BCBB6';
+})
+
+buttonSave.addEventListener('mouseover',() => {
+    console.log('5')
+    buttonSave.style.background = '#53BBA8';
+})
+
+buttonSave.addEventListener('mouseout',() => {
+    console.log('6')
+    buttonSave.style.background = '#6BCBB6';
+})
+
 
 function getComments(){
-    let avatarImg = document.createElement('img')
-    avatarImg.setAttribute ('src', './IMG/usuario.jpeg')
-    avatarImg.setAttribute ('class', 'avatar_img')
-    // console.log(avatarImg);
     let nameCommentator = nameInput.value;
-    let comment = commentInput.value;
-    
-    let removeButton = document.createElement('img')
-    removeButton.setAttribute ('src', './IMG/remove.png')
-    removeButton.setAttribute ('class', 'remove__button-img')
-    let generateId = Math.floor(Math.random() * 1001)
-    removeButton.setAttribute ('data-id', `${generateId}`)
-    // console.log(removeButton)
-    
+    let commentText = commentInput.value;
     let now = new Date;
-    let commentsArr = [];
+    let generateId = Math.floor(Math.random() * 1001)
     let commentObj = {
-        avatar: avatarImg,
         name: nameCommentator,
         date: {
             weekDay: now.getDate(),
@@ -161,105 +186,62 @@ function getComments(){
             year: now.getFullYear(),
             hour: now. getHours(),
             minutes: now.getMinutes()
-        },                                                                                                                                          
-        comment: comment,
-        remove: removeButton,
-        id: generateId
+        },             
+        id: generateId,
+        comment: commentText,
+        remove: generateId
     }
-    // console.log(commentObj.id)
     commentsArr.push(commentObj);
-    renderComments(commentsArr)
+    renderComments()
 }
 
-function renderComments(commentsArr){
+    
+
+function renderComments(){
     nameInput.value = " ",
     commentInput.value = " ";
-    let commentsList = document.querySelector('.comments_list')
-
-    let comment = document.createElement('li')
-    comment.setAttribute('class', 'rewiewer')
-    commentsList.appendChild(comment)
-
-    let commentLeftElem = document.createElement('div')
-    commentLeftElem.setAttribute('class', 'left')
-    comment.appendChild(commentLeftElem)
-
-    let commentCenterElem = document.createElement('div')
-    commentCenterElem.setAttribute('class', 'center')
-    comment.appendChild(commentCenterElem)
-
-    let commentCenterTop = document.createElement('div')
-    commentCenterTop.setAttribute('class', 'top')
-    commentCenterElem.appendChild(commentCenterTop)
-
-    
-    //НЕ ЗАБУДЬ ВСТАВИТЬ ДАТУ!!!
-    //НЕ ЗАБУДЬ ПОПРАВИТЬ КЛАССЫ!!!!
-
-    let commentCenterBottom = document.createElement('div')
-    commentCenterBottom.setAttribute('class', 'bottom')
-    commentCenterElem.appendChild(commentCenterBottom)
-
-    let commentElemRight = document.createElement('div')
-    commentElemRight.setAttribute('class', 'right')
-    comment.appendChild(commentElemRight)
-    
-    commentsArr.forEach(item => {
-
-        let commentsElem = item;
-        console.log(commentsElem)
-        commentLeftElem.appendChild(commentsElem.avatar)
-
-        let commentatorName = document.createElement('p')
-        commentatorName.innerHTML = commentsElem.name
-        commentatorName.setAttribute('class', 'name')
-        commentCenterTop.appendChild(commentatorName)
-
-        let nowDate = document.createElement('p')
-        nowDate.setAttribute('class', 'date')
-        let dataComment = `${item.date.weekDay}.${item.date.month}.${item.date.year} ${item.date.hour}:${item.date.minutes}`
-        nowDate.innerHTML = dataComment
-        commentCenterTop.appendChild(nowDate)
-        
-        let comment = document.createElement('p')
-        comment.innerHTML = commentsElem.comment
-        comment.setAttribute('class', 'comment')
-        commentCenterBottom.appendChild(comment)
-
-        let removeComment = commentsElem.remove
-        commentElemRight.appendChild(removeComment) 
-    });
-    console.log(commentsArr)
-    commentsList.addEventListener('click', (e) =>{
-        let targetButton = e.target;
-        // console.log(targetButton);
-        if(targetButton.className !== 'remove__button-img'){
-            return
-        } else {
-            let id = targetButton.getAttribute('data-id')
-            console.log(id)
-            
-            const commentIndex = commentsArr.findIndex((a => a.id === Number(id)))
-            console.log(commentIndex)
-        }            
-    })
+    const comment = renderFn ({comments: commentsArr})
+    commentList.innerHTML = comment
     
 }
 
-let buttonSave = document.querySelector('.save__button')
-buttonSave.addEventListener('click',() => {
-    
-    save()
+commentList.addEventListener('click', (e) =>{
+    let targetButton = e.target;
+    if(targetButton.className !== 'remove__button-img'){
+        return
+    } else {
+        let id = targetButton.getAttribute('id')
+        const commentIndex = commentsArr.findIndex((a => a.id === Number(id)))
+        commentsArr.splice(commentIndex, 1)
+        renderComments()
+
+        
+    }            
 })
 
-function save(){
 
-}
+buttonSave.addEventListener('click',() => {
+    localStorage.setItem('store', JSON.stringify({
+        commList: commentsArr
+    }))
+    // alert('Data OK')
+})
+
 
    
 
     
-    
+
+            // //сохранение данных в LocalStorage
+            // const buttonSave = document.querySelector('.footer_submit');
+            // buttonSave.addEventListener('click',() =>{
+            //     localStorage.setItem('store', JSON.stringify({
+            //         leftList: filterFriendsLeftArr,
+            //         rightList:filterFriendsRightArr
+            //     }))
+            //     alert('Data OK')
+            // })
+
 
 
 

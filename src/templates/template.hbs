@@ -1,12 +1,22 @@
-    {{#each commentators}}
-        <li class="commentator">
-            <img src='../../IMG/Layer 3.png' class="avatar_img">
-            <div>{{first_name}} {{date}}</div>
-            <div class="comment_elem">
-                {{comment}}
+    {{#each comments}}
+    <li class="comment">
+            <div class="left">
+                <img src="./IMG/usuario.jpeg" class="avatar_img">
             </div>
-                <div class="remove_rewiew"> 
-                    <img src="../../IMG/remove.png">
+            <div class="center">
+                <div class="top">
+                    <p class="name"> {{name}} </p>
+                       <p class="date"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
                 </div>
+                <div class="bottom">
+                    <p class="comment">
+                        {{comment}}
+                    </p>
+                </div>
+            </div>
+            <div class="right">
+                    <img src="./IMG/remove.png" class="remove__button-img" id = {{remove}}> 
+            </div>
         </li>
+        <hr color='black' size='1px'>
     {{/each}}
