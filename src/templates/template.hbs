@@ -1,22 +1,28 @@
     {{#each comments}}
-    <li class="comment">
-            <div class="left">
-                <img src="./IMG/usuario.jpeg" class="avatar_img">
+    <li class="comment" draggable="true" ondragstart="dragStart(e)">
+        <div class="left">
+            <img src="./IMG/usuario.jpeg" class="avatar_img">
+        </div>
+        <div class="center">
+            <div class="top">
+                <p class="name elem__text"> {{name}} </p>
+                    <p class="date elem__text"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
             </div>
-            <div class="center">
-                <div class="top">
-                    <p class="name elem__text"> {{name}} </p>
-                       <p class="date elem__text"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
-                </div>
-                <div class="bottom">
-                    <p class="comment elem__text">
-                        {{comment}}
-                    </p>
-                </div>
+            <div class="bottom">
+                <p class="comment elem__text">
+                    {{comment}}
+                </p>
             </div>
-            <div class="right">
-                    <img src="./IMG/remove.png" class="remove__button-img" id = {{remove}}> 
-            </div>
-        </li>
-        <hr size='1px' color='#aaa'>
+        </div>
+        <div class="right">
+                <img src="./IMG/remove.png" class="remove__button-img" data-id = {{id}}> 
+        </div>
+    </li>
+    <hr size='1px' color='#aaa'>
     {{/each}}
+
+
+{{!-- search-block
+.search-block__input.search-block__input--invalid
+search-block__icon
+search-block__button --}}
