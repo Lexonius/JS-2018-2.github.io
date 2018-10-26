@@ -1,134 +1,204 @@
 import './styles/styles.css';
 // // import { auth } from './utils'
-import renderFn from './templates/template.hbs'
+import renderFtriends from './templates/template.hbs'
+import renderInfo from './templates/info.hbs'
+import renderHistory from './templates/template.hbs'
+// //теккущее состояние
 
-let nameInput = document.querySelector('.input_name')
-let commentInput = document.querySelector('.input_comment')
-let addButton = document.querySelector('.button__add')
-let buttonSave = document.querySelector('.button-save')
-let commentsArr = [];
-let commentList = document.querySelector('.comments_list')
+// let state = 0;
+// let image = document.createElement('img')
+// let imageListElem = document.createElement('li')
+// let imageListTop = document.querySelector('.slider__block--center--top__list')
+// let imageListBottom = document.querySelector('.slider__block--center--bottom__list')
+// // let button = document.createElement('div')
 
-
-if(localStorage.getItem('store')){
-    let commentParse = JSON.parse(localStorage.getItem('store'))
-    // alert("nice")
-    commentsArr = commentParse.commList;
-    // console.log(commentsArr)
-    renderComments(commentsArr)
-} else {
-    commentsArr = []
-    renderComments()
-}
-
-addButton.addEventListener('click',() => {
-    console.log(nameInput.value)
-    console.log(commentInput.value)
-    let isInvalid = false;
-
-    if (!nameInput.value) {
-        nameInput.style.border = "3px solid #BE4F4F";
-        isInvalid = true;
-    }
-
-    if (!commentInput.value) {
-        commentInput.style.border = "3px solid #BE4F4F";
-        isInvalid = true;
-    }
-
-    if (isInvalid) {
-        return;
-    }
-
-    getComments();
-})
-
-nameInput.addEventListener('keydown',() =>{
-    nameInput.style.border = "3px solid #6BCBB6"
-})
-
-commentInput.addEventListener('keydown',() =>{
-    commentInput.style.border = "3px solid #6BCBB6"
-})
-
-addButton.addEventListener('mouseover',() => {
-    addButton.style.background = '#53BBA8';
-})
-
-addButton.addEventListener('mouseout',() => {
-    addButton.style.background = '#6BCBB6';
-})
-
-buttonSave.addEventListener('mouseover',() => {
-    buttonSave.style.background = '#53BBA8';
-})
-
-buttonSave.addEventListener('mouseout',() => {
-    buttonSave.style.background = '#6BCBB6';
-})
+// // button.setAttribute()
+// //массив с нашими изображениями
+// let data = [
+//     { id: 0, src: './02.jpg'},
+//     { id: 1, src: './1476283575_10437141_0.jpg'},
+//     { id: 2, src: './kosmos-14.jpg'}
+// ]
 
 
-function getComments(){
-    let nameCommentator = nameInput.value;
-    let commentText = commentInput.value;
-    let now = new Date;
-    let generateId = Math.floor(Math.random() * 1001)
-    let commentObj = {
-        name: nameCommentator,
-        date: {
-            weekDay: now.getDate(),
-            month: now.getMonth(),
-            year: now.getFullYear(),
-            hour: now. getHours(),
-            minutes: now.getMinutes()
-        },             
-        id: generateId,
-        comment: commentText,
-    }
-    commentsArr.push(commentObj);
-    renderComments()
-}
+// //функция по перерисвке
+// const renderFn = () => {
+//     //в этой переменной будет лежать элемент массива по номеру, который лежит в state
+//     const currentData = data[state];
+//     imageListElem.setAttribute('class','image__elem--top')
+//     image.setAttribute('src',`${currentData.src}`)
+//     image.setAttribute('class','image')
+//     imageListTop.appendChild(imageListElem);
+//     imageListElem.appendChild(image);
+
+//     // стереть старую картинку
+//     // нарисовать новую с текущим src
+// }
+    
+// if(data[state] === 0){
+//     imageListElem.removeChild(image)
+// } else {
+//     renderFn()
+// }
+
+
+// //создал li для каждого элемента массива
+// data.forEach(element => {
+//     let buttonList = document.createElement('li')
+//     buttonList.setAttribute('class', 'button__list--elem')
+//     imageListBottom.appendChild(buttonList)
+//     ///создать id кнопки равный id элемента
+//     buttonList.setAttribute('data-id', `${element.id}`)
 
     
+// });
 
-function renderComments(){
-    nameInput.value = "",
-    commentInput.value = "";
-    const comment = renderFn ({comments: commentsArr})
-    commentList.innerHTML = comment
-    
+
+// //при нажатии на кнопку
+// imageListBottom.addEventListener('click', (e) =>{
+//     //получаем элемент по которому нажали
+//     let targetButton = e.target;
+//     //получаем индекс(id) элемента
+//     let indexButton = targetButton.getAttribute('data-id')
+//     //если нажатие пришлось не на кнопку
+//     if(targetButton.className !== 'button__list--elem'){
+//         //выходим из функции
+//         return
+//     } else {
+//         //стейт будет равен индексу(id) нажатой кнопки
+//         state = Number(indexButton);
+//         renderFn();
+//     } 
+// })
+
+
+VK.init({
+    apiId: 6502079
+});
+
+function authVk(){
+    return new Promise((resolve, reject) => {
+        VK.Auth.login (data =>{
+            if (data.session){
+                resolve();
+            } else {
+                reject(new Error('Не удалось авторизироваться'))
+            }
+        }, 2) 
+    })
+} 
+authVk().then(() => console.log('ok'))
+
+function callAPI (method, params) {
+    params.v = '5.76';
+
+    return new Promise((resolve, reject) => {
+        VK.api(method, params, (data) => {
+            if (data.error) {
+                reject (data.error);
+            } else {
+                // на данном этапе получили массив с друзьями
+                resolve(data.response)
+                // console.log(data.response)
+            }
+        });
+    })
 }
 
-commentList.addEventListener('click', (e) =>{
+authVk()
+
+.then(() => {
+    return callAPI ('users.get', { name_case: 'gen'});
+})
+.then(([me]) => {
+    return callAPI('friends.get', {fields: 'photo_100'});
+})
+.then(friends => {
+    // проврка: если друзья есть и в левом и в правом списке, то я их кладу в свои массивы, если их нет, то я беру friends.items и кладу в левый список, в правый пустой массив
+    // if(localStorage.getItem('store')){
+    //     let friendsParse = JSON.parse(localStorage.getItem('store'))
+    //     alert("nice")
+    //     leftListArray = friendsParse.leftList;
+    //     rightListArray = friendsParse.rightList;
+    //     renderFriendsListLeft();
+    //     renderFriendsListRight();
+    // } else {
+    //     leftListArray = friends.items;
+    //     rightListArray = [];
+    //     renderFriendsListLeft();
+    //     renderFriendsListRight();
+    // }
+    console.log(friends)
+})
+
+let state = 0;
+let image = document.createElement('img')
+let imageListElem = document.createElement('li')
+let imageListTop = document.querySelector('.slider__block--center--top__list')
+let imageListBottom = document.querySelector('.slider__block--center--bottom__list')
+// let button = document.createElement('div')
+
+// button.setAttribute()
+//массив с нашими изображениями
+let data = [
+    { id: 0, title: 'Имя' },
+    { id: 1, title: 'Друзья' },
+    { id: 2, title: 'История'}
+]
+
+
+//функция по перерисвке
+// const renderFn = () => {
+//     //в этой переменной будет лежать элемент массива по номеру, который лежит в state
+//     const currentData = data[state];
+//     imageListElem.setAttribute('class','image__elem--top')
+//     image.setAttribute('class','image')
+//     imageListTop.appendChild(imageListElem);
+//     console.log(data.id)
+
+//     // стереть старую картинку
+//     // нарисовать новую с текущим src
+// }
+    
+// if(data[state] === 0){
+//     imageListElem.removeChild(image)
+// } else {
+//     renderFn()
+// }
+
+
+//создал li для каждого элемента массива
+data.forEach(element => {
+    let buttonList = document.createElement('li')
+    buttonList.setAttribute('class', 'button__list--elem')
+    imageListBottom.appendChild(buttonList)
+    ///создать id кнопки равный id элемента
+    buttonList.setAttribute('data-id', `${element.id}`)
+    buttonList.innerHTML = element.title
+    // data.forEach(element => {
+    //     buttonList.innerHTML = element.title
+    // });
+    
+});
+
+
+//при нажатии на кнопку
+imageListBottom.addEventListener('click', (e) =>{
+    //получаем элемент по которому нажали
     let targetButton = e.target;
-    if(targetButton.className !== 'remove__button-img'){
+    //получаем индекс(id) элемента
+    let indexButton = targetButton.getAttribute('data-id')
+    //если нажатие пришлось не на кнопку
+    if(targetButton.className !== 'button__list--elem'){
+        //выходим из функции
         return
     } else {
-        let id = targetButton.getAttribute('data-id')
-        const commentIndex = commentsArr.findIndex((a => a.id === Number(id)))
-        commentsArr.splice(commentIndex, 1)
-        renderComments();
-    }            
+        //стейт будет равен индексу(id) нажатой кнопки
+        state = Number(indexButton);
+        // let sliderCenter = .querySelector('.slider__block--center--top__list')
+        const infoHtml = renderInfo ();
+        // console.log(infoHtml)
+        imageListTop.innerHTML = infoHtml
+    } 
 })
-
-buttonSave.addEventListener('click',() => {
-    localStorage.setItem('store', JSON.stringify({
-        commList: commentsArr
-    }))
-    // alert('Data OK')
-})
-
-window.dragStart = function(e){
-    e.dataTransfer.effectAllowed='move';
-    e.dataTransfer.setData("Text", e.target.getAttribute('id'));   
-    return true;
-}
-
-   
-
-
-
-
-
-
 

@@ -1,24 +1,15 @@
-    {{#each comments}}
-    <li class="comment" draggable="true" ondragstart="dragStart(e)">
-        <div class="left">
-            <img src="./IMG/usuario.jpeg" class="avatar_img">
-        </div>
-        <div class="center">
-            <div class="top">
-                <p class="name elem__text"> {{name}} </p>
-                    <p class="date elem__text"> {{date.weekDay}}.{{date.month}}.{{date.year}} {{date.hour}}:{{date.minutes}}</p>    
-            </div>
-            <div class="bottom">
-                <p class="comment elem__text">
-                    {{comment}}
-                </p>
-            </div>
-        </div>
-        <div class="right">
-                <img src="./IMG/remove.png" class="remove__button-img" data-id = {{id}}> 
-        </div>
-    </li>
-    <hr size='1px' color='#aaa'>
+  {{#each my_friends}}
+        <li class="friend">
+            <img src='{{photo_100}}' class="avatar_img">
+            <div>{{first_name}} {{last_name}}</div>
+            <ul>
+            {{#each friends.items}}
+                <li>
+                    {{this}}
+                </li>
+            {{/each}}
+            </ul>
+        </li>
     {{/each}}
 
 
