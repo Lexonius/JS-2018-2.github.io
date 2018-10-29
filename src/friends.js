@@ -1,6 +1,6 @@
 import './styles/styles.css';
 // // import { auth } from './utils'
-import renderFtriends from './templates/template.hbs'
+import renderFriends from './templates/template.hbs'
 import renderInfo from './templates/info.hbs'
 import renderHistory from './templates/template.hbs'
 // //теккущее состояние
@@ -71,6 +71,9 @@ import renderHistory from './templates/template.hbs'
 //     } 
 // })
 
+let friendsArr = []
+let friendsFilterArr = []
+friendsFilterArr = friendsArr;
 
 VK.init({
     apiId: 6502079
@@ -108,10 +111,10 @@ function callAPI (method, params) {
 authVk()
 
 .then(() => {
-    return callAPI ('users.get', { name_case: 'gen'});
+    return callAPI ('users.get', {name_case: 'gen'});
 })
 .then(([me]) => {
-    return callAPI('friends.get', {fields: 'photo_100'});
+    return callAPI('friends.get', {count: 20, fields: 'photo_100'} );
 })
 .then(friends => {
     // проврка: если друзья есть и в левом и в правом списке, то я их кладу в свои массивы, если их нет, то я беру friends.items и кладу в левый список, в правый пустой массив
@@ -128,13 +131,17 @@ authVk()
     //     renderFriendsListLeft();
     //     renderFriendsListRight();
     // }
-    console.log(friends)
+    
+    friendsArr = friends.items
+    // console.log(friendsArr)
 })
 
 let state = 0;
-let image = document.createElement('img')
-let imageListElem = document.createElement('li')
+// let image = document.createElement('img')
+// let imageListElem = document.createElement('li')
 let imageListTop = document.querySelector('.slider__block--center--top__list')
+let friendsContainer = document.querySelector('.slider__block--center--top')
+let friendsInputContainer = document.querySelector('.slider__block--center--bottom')
 let imageListBottom = document.querySelector('.slider__block--center--bottom__list')
 // let button = document.createElement('div')
 
@@ -147,24 +154,16 @@ let data = [
 ]
 
 
-//функция по перерисвке
-// const renderFn = () => {
-//     //в этой переменной будет лежать элемент массива по номеру, который лежит в state
-//     const currentData = data[state];
-//     imageListElem.setAttribute('class','image__elem--top')
-//     image.setAttribute('class','image')
-//     imageListTop.appendChild(imageListElem);
-//     console.log(data.id)
-
-//     // стереть старую картинку
-//     // нарисовать новую с текущим src
-// }
-    
-// if(data[state] === 0){
-//     imageListElem.removeChild(image)
-// } else {
-//     renderFn()
-// }
+// console.log(data[state])
+if(data.id === 0){
+    // console.log(data[state])
+    const infoHtml = renderInfo();
+        // console.log(infoHtml)
+    imageListTop.innerHTML = infoHtml
+} 
+else {
+    // console.log('5')
+}
 
 
 //создал li для каждого элемента массива
@@ -180,9 +179,10 @@ data.forEach(element => {
     // });
     
 });
-
-
+// let inputContainer = document.createElement('div')
+// let friendInput = document.createElement('input')
 //при нажатии на кнопку
+let friendInput = document.querySelector('.search__input')
 imageListBottom.addEventListener('click', (e) =>{
     //получаем элемент по которому нажали
     let targetButton = e.target;
@@ -196,9 +196,38 @@ imageListBottom.addEventListener('click', (e) =>{
         //стейт будет равен индексу(id) нажатой кнопки
         state = Number(indexButton);
         // let sliderCenter = .querySelector('.slider__block--center--top__list')
-        const infoHtml = renderInfo ();
+        if(state === 0){
+        const infoHtml = renderInfo();
         // console.log(infoHtml)
-        imageListTop.innerHTML = infoHtml
+        imageListTop.innerHTML = infoHtml   
+        friendsContainer.style.overflowY = 'hidden'
+        // friendsContainer.removeChild(friendInput)
+        } else if(state === 1){
+            // console.log('65')
+            friendsInputContainer.appendChild(friendInput)
+            console.log(state)
+            const friendsHtml = renderFriends({my_friends: friendsArr});
+            // // console.log(friendsHtml)
+            imageListTop.innerHTML = friendsHtml
+            friendsContainer.style.overflowY = 'scroll'
+            friendsContainer.style.overflowX = 'hidden'
+        }
     } 
 })
 
+let friendInputField = document.querySelector('.search__input')
+
+friendInputField.addEventListener('keyup', () => {
+    
+})
+
+function isMatching(full, chunk) {
+    if(full.toLowerCase().indexOf(chunk.toLowerCase()) !== -1){
+      return true;
+    } else {
+      return false;
+    }
+  }
+ 
+
+console.log(friendInput)

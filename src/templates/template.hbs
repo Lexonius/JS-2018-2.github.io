@@ -1,16 +1,23 @@
-  {{#each my_friends}}
-        <li class="friend">
-            <img src='{{photo_100}}' class="avatar_img">
-            <div>{{first_name}} {{last_name}}</div>
-            <ul>
-            {{#each friends.items}}
-                <li>
-                    {{this}}
-                </li>
-            {{/each}}
-            </ul>
-        </li>
-    {{/each}}
+
+    
+        {{!-- <li class="input">
+            <input type="text" placeholder="введите имя" class="search__input">
+        </li> --}}
+        {{#each my_friends}}
+            <li class="friend">
+                <img src='{{photo_100}}' class="avatar_img">
+                <div>{{first_name}} {{last_name}}</div>
+                {{!-- <ul>
+                {{#each friends.items}}
+                    <li>
+                        {{this}}
+                    </li>
+                {{/each}}
+                </ul> --}}
+            </li>
+        {{/each}}
+ 
+  
 
 
 {{!-- search-block
