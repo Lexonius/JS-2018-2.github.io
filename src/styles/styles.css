@@ -10,6 +10,8 @@
     display: flex;
     flex-direction: column;
     display: none;
+    z-index: 1000;
+    position: absolute;
 }
 /* .adres{
     width: 100px;
@@ -54,6 +56,7 @@
     border: none;
     background: wheat;
     border-radius: 5px;
+    outline: none;
 }
 .baloon__footer{
     display: flex;
