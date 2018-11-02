@@ -259,7 +259,7 @@ import renderFn from './templates/template.hbs'
 
             
 
-            clusterer.add(markers);
+            clusterer.add(placemark);
             map.geoObjects.add(clusterer);
             // console.log(markers);
             // console.log(placemark);
