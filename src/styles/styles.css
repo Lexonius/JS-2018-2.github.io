@@ -13,9 +13,9 @@
     z-index: 1000;
     position: absolute;
 }
-/* .adres{
-    width: 100px;
-} */
+.adres{
+    font-size: 10px;
+}
 .baloon__header{
     background-color: wheat;
     justify-content: flex-end;

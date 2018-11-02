@@ -110,72 +110,180 @@ import renderFn from './templates/template.hbs'
     // '</div>'
     // ) 
 
+    // let buttonAdd = document.querySelector('.add')
+    // let baloon = document.querySelector('.baloon')
+    // let closeImage = document.querySelector('.button__image--clear')
+    // let nameInput = document.querySelector('.name-input')
+    // let placeInput = document.querySelector('.place-input')
+    // let commentInput = document.querySelector('.name-input')
+    // // let mape = document.querySelector('#map')
+    // // let addressMarker;
+    // let addressTitle = document.querySelector('.adres')
+    // let points = [];
+    // let markers;
+
+    // map.events.add('click', e =>{ 
+    //     let coords = e.get('coords');
+    //     points.push(coords)
+    //     // let coordsX = coords[0]
+    //     // let coordsY =  coords[1]
+    //     // console.log(coords)
+    //     let position = e.get('position')
+    //     // console.log(position)
+    //     console.log(coords)
+    //     baloon.style.display = 'block';
+    //     baloon.style.left = position[0] + 'px';
+    //     baloon.style.top = position[1] + 'px';
+    //     getAdress(coords)
+    //     for(let i = 0; i < points.length; i++){
+    //         // console.log(points[i])
+    //        let placemark = new ymaps.GeoObject({
+    //             geometry:{
+    //                 type: "Point",
+    //                 coordinates:points[i]
+    //             },
+    //             properties:{
+    //                 // address: 
+    //                 // clusterCaption: 'Геообъект №2',
+    //                 // balloonContentBody: 'Содержимое балуна геообъекта №2.'
+    //             }
+    //         });
+    //         placemark.events.add('click', e => {
+    //             baloon.style.display = 'block';
+    //             addressTitle.innerHTML = 'загрузка...'
+    //             baloon.style.left = position[0] + 'px';
+    //             baloon.style.top = position[1] + 'px';
+    //             getAdress(coords)
+    //         })
+    //         markers = placemark;
+    //         // console.log(markersArr)
+    //     }
+
+
+    //     buttonAdd.addEventListener('click', e => {
+    //         let nameText = nameInput.value
+    //         let placeName = placeInput.value
+    //         let commentText = commentInput.value
+    //         console.log(nameText);
+    //         console.log(placeName);
+    //         console.log(commentText);
+    //         nameInput.value = ''
+    //         placeInput.value = ''
+    //         clusterer.add(markers);
+    //         map.geoObjects.add(clusterer); 
+    //     })
+
+
+    // closeImage.addEventListener('click', e =>{
+    //     e.preventDefault()
+    //     baloon.style.display = 'none';
+    //     // coordsX = ''
+    //     // console.log(coordsX)
+    //     // coordsY = ''
+    // })
+
+    // function getAdress(){
+    //     ymaps.geocode(coords).then(function (res) {
+    //         var firstGeoObject = res.geoObjects.get(0);
+    //         // var address = firstGeoObject.properties._data.balloonContent;
+    //         let adress = firstGeoObject.getAddressLine()
+    //         console.log(adress)
+    //         addressTitle.innerHTML = adress
+    //         // addressMarker = address;
+    //         })
+    //     }
+    // })
     let buttonAdd = document.querySelector('.add')
     let baloon = document.querySelector('.baloon')
     let closeImage = document.querySelector('.button__image--clear')
-    // let mape = document.querySelector('#map')
-    // let addressMarker;
+    let nameInput = document.querySelector('.name-input')
+    let placeInput = document.querySelector('.place-input')
+    let commentInput = document.querySelector('.comment-input')
     let addressTitle = document.querySelector('.adres')
-    let points = [];
-    let markersArr = []
 
-    map.events.add('click', e =>{ 
-        let coords = e.get('coords');
-        points.push(coords)
-        // let coordsX = coords[0]
-        // let coordsY =  coords[1]
+    map.events.add('click', e =>{
+        let coords = e.get('coords')
         // console.log(coords)
         let position = e.get('position')
-        // console.log(position)
-        console.log(coords)
         baloon.style.display = 'block';
         baloon.style.left = position[0] + 'px';
         baloon.style.top = position[1] + 'px';
+        let markers = [];
+        // let placemark;
         getAdress(coords)
-        for(let i = 0; i < points.length; i++){
-            // console.log(points[i])
-           let placemark = new ymaps.GeoObject({
+        
+
+        buttonAdd.addEventListener('click', e => {
+            
+            let rewiewObj = {
+                name: undefined,
+                place: undefined,
+                rewiew: undefined,
+                coordinates: undefined,
+                // marker: undefined
+            }
+            
+            rewiewObj.coordinates = coords
+            let nameRewiewer = nameInput.value;
+            let placeName = placeInput.value;
+            let commentText = commentInput.value;
+            nameInput.value = '';
+            placeInput.value = '';
+            commentInput.value = '';
+            rewiewObj.name = nameRewiewer;
+            rewiewObj.place = placeName;
+            rewiewObj.rewiew = commentText;
+
+            if(!nameRewiewer && !placeName && !commentText){
+                return
+            } else {
+                markers.push(rewiewObj);
+            }
+            // console.log(rewiewObj)
+            // console.log(markers);
+            
+            let placemark = new ymaps.GeoObject({
                 geometry:{
-                    type: "Point",
-                    coordinates:points[i]
+                   type: "Point",
+                   coordinates:rewiewObj.coordinates
                 },
                 properties:{
+                    // address: 
                     // clusterCaption: 'Геообъект №2',
                     // balloonContentBody: 'Содержимое балуна геообъекта №2.'
                 }
             });
-            placemark.events.add('click', e => {
-                baloon.style.display = 'block';
-                addressTitle.innerHTML = 'загрузка...'
-                getAdress(coords)
-            })
-            markersArr = placemark;
-            console.log(markersArr)
-        }
 
+            //   
+            
 
-        buttonAdd.addEventListener('click', e => {
-            clusterer.add(markersArr);
-            map.geoObjects.add(clusterer); 
+            
+
+            clusterer.add(markers);
+            map.geoObjects.add(clusterer);
+            // console.log(markers);
+            // console.log(placemark);
         })
 
+        
 
-    closeImage.addEventListener('click', e =>{
-        e.preventDefault()
-        baloon.style.display = 'none';
-        // coordsX = ''
-        // console.log(coordsX)
-        // coordsY = ''
+        closeImage.addEventListener('click', e => {
+            e.preventDefault()
+            baloon.style.display = 'none';
+        })
+
+        function getAdress(){
+            ymaps.geocode(coords).then(function (res) {
+                var firstGeoObject = res.geoObjects.get(0);
+                // var address = firstGeoObject.properties._data.balloonContent;
+                let adress = firstGeoObject.getAddressLine()
+                console.log(adress)
+                addressTitle.innerHTML = adress
+                // addressMarker = address;
+                })
+            }
     })
 
-    function getAdress(coords){
-        ymaps.geocode(coords).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
-            var address = firstGeoObject.properties._data.balloonContent;
-            addressTitle.innerHTML = address
-            // addressMarker = address;
-            })
-        }
-    })
+
 
 });
