@@ -209,12 +209,12 @@ import renderFn from './templates/template.hbs'
         baloon.style.left = position[0] + 'px';
         baloon.style.top = position[1] + 'px';
         let markers = [];
-        // let placemark;
+        // let geoObj = [];
+        let placemarks;
         getAdress(coords)
         
-
         buttonAdd.addEventListener('click', e => {
-            
+            console.log('6')
             let rewiewObj = {
                 name: undefined,
                 place: undefined,
@@ -239,33 +239,26 @@ import renderFn from './templates/template.hbs'
             } else {
                 markers.push(rewiewObj);
             }
-            // console.log(rewiewObj)
-            // console.log(markers);
-            
-            let placemark = new ymaps.GeoObject({
-                geometry:{
-                   type: "Point",
-                   coordinates:rewiewObj.coordinates
-                },
-                properties:{
-                    // address: 
-                    // clusterCaption: 'Геообъект №2',
-                    // balloonContentBody: 'Содержимое балуна геообъекта №2.'
-                }
+
+            markers.forEach( i => {
+                let placemark = new ymaps.GeoObject({
+                    geometry:{
+                       type: "Point",
+                       coordinates:i.coordinates
+                    },
+                    properties:{
+                        // address: 
+                        // clusterCaption: 'Геообъект №2',
+                        // balloonContentBody: 'Содержимое балуна геообъекта №2.'
+                    }
+                });
+                placemarks = placemark;
             });
-
-            //   
-            
-
-            
-
-            clusterer.add(placemark);
+            clusterer.add(placemarks);
             map.geoObjects.add(clusterer);
             // console.log(markers);
             // console.log(placemark);
         })
-
-        
 
         closeImage.addEventListener('click', e => {
             e.preventDefault()
