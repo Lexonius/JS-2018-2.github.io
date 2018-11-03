@@ -1,46 +1,49 @@
-import './styles/styles.css'; 
+import './styles/styles.css';
 import renderFn from './templates/template.hbs'
 
-    ymaps.ready(function () { 
-    var mapCenter = [55.755381, 37.619044], 
-    map = new ymaps.Map('map', { 
-    center: mapCenter, 
-    zoom: 9, 
-    controls: [] 
-    }); 
-    
+//
+const ymaps = window.ymaps;
+
+ymaps.ready(function () {
+    var mapCenter = [55.755381, 37.619044],
+        map = new ymaps.Map('map', {
+            center: mapCenter,
+            zoom: 9,
+            controls: []
+        });
+
     // Создаем собственный макет с информацией о выбранном геообъекте. 
-    var customItemContentLayout = ymaps.templateLayoutFactory.createClass( 
-    // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html. 
-    '<h2 class=ballon_header>{{ properties.balloonContentHeader|raw }}</h2>' + 
-    '<div class=ballon_body>{{ properties.balloonContentBody|raw }}</div>' + 
-    '<div class=ballon_footer>{{ properties.balloonContentFooter|raw }}</div>' 
-    ); 
-    
-    var clusterer = new ymaps.Clusterer({ 
-    clusterDisableClickZoom: true, 
-    clusterOpenBalloonOnClick: true, 
-    // Устанавливаем стандартный макет балуна кластера "Карусель". 
-    clusterBalloonContentLayout: 'cluster#balloonCarousel', 
-    // Устанавливаем собственный макет. 
-    clusterBalloonItemContentLayout: customItemContentLayout, 
-    // Устанавливаем режим открытия балуна. 
-    // В данном примере балун никогда не будет открываться в режиме панели. 
-    clusterBalloonPanelMaxMapArea: 0, 
-    // Устанавливаем размеры макета контента балуна (в пикселях). 
-    clusterBalloonContentLayoutWidth: 200, 
-    clusterBalloonContentLayoutHeight: 130, 
-    // Устанавливаем максимальное количество элементов в нижней панели на одной странице 
-    clusterBalloonPagerSize: 5 
-    // Настройка внешего вида нижней панели. 
-    // Режим marker рекомендуется использовать с небольшим количеством элементов. 
-    // clusterBalloonPagerType: 'marker', 
-    // Можно отключить зацикливание списка при навигации при помощи боковых стрелок. 
-    // clusterBalloonCycling: false, 
-    // Можно отключить отображение меню навигации. 
-    // clusterBalloonPagerVisible: false 
-    }); 
-    
+    var customItemContentLayout = ymaps.templateLayoutFactory.createClass(
+        // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html. 
+        '<h2 class=ballon_header>{{ properties.balloonContentHeader|raw }}</h2>' +
+        '<div class=ballon_body>{{ properties.balloonContentBody|raw }}</div>' +
+        '<div class=ballon_footer>{{ properties.balloonContentFooter|raw }}</div>'
+    );
+
+    var clusterer = new ymaps.Clusterer({
+        clusterDisableClickZoom: true,
+        clusterOpenBalloonOnClick: true,
+        // Устанавливаем стандартный макет балуна кластера "Карусель". 
+        clusterBalloonContentLayout: 'cluster#balloonCarousel',
+        // Устанавливаем собственный макет. 
+        clusterBalloonItemContentLayout: customItemContentLayout,
+        // Устанавливаем режим открытия балуна. 
+        // В данном примере балун никогда не будет открываться в режиме панели. 
+        clusterBalloonPanelMaxMapArea: 0,
+        // Устанавливаем размеры макета контента балуна (в пикселях). 
+        clusterBalloonContentLayoutWidth: 200,
+        clusterBalloonContentLayoutHeight: 130,
+        // Устанавливаем максимальное количество элементов в нижней панели на одной странице 
+        clusterBalloonPagerSize: 5
+        // Настройка внешего вида нижней панели. 
+        // Режим marker рекомендуется использовать с небольшим количеством элементов. 
+        // clusterBalloonPagerType: 'marker', 
+        // Можно отключить зацикливание списка при навигации при помощи боковых стрелок. 
+        // clusterBalloonCycling: false, 
+        // Можно отключить отображение меню навигации. 
+        // clusterBalloonPagerVisible: false 
+    });
+
     // Заполняем кластер геообъектами со случайными позициями. 
     // var placemarks = []; 
     // for (var i = 0, l = 100; i < l; i++) { 
@@ -52,30 +55,31 @@ import renderFn from './templates/template.hbs'
     // }); 
     // placemarks.push(placemark); 
     // } 
-    
-    
-    
-    
+
+
+
+
     // function getRandomPosition () { 
     // return [ 
     // mapCenter[0] + (Math.random() * 0.3 - 0.15), 
     // mapCenter[1] + (Math.random() * 0.5 - 0.25) 
     // ]; 
     // } 
-    
-    var placemarkBodies; 
-    function getContentBody (num) { 
-    if (!placemarkBodies) { 
-    placemarkBodies = [ 
-    ['Слово скажу -', 'Леденеют губы.', 'Осенний вихрь!'].join('<br/>'), 
-    ['Вновь встают с земли', 'Опущенные дождем', 'Хризантем цветы.'].join('<br/>'), 
-    ['Ты свечу зажег.', 'Словно молнии проблеск,', 'В ладонях возник.'].join('<br/>') 
-    ]; 
-    } 
-    return '<br>' + placemarkBodies[num % placemarkBodies.length]; 
-    } 
+
+    var placemarkBodies;
+
+    function getContentBody(num) {
+        if (!placemarkBodies) {
+            placemarkBodies = [
+                ['Слово скажу -', 'Леденеют губы.', 'Осенний вихрь!'].join('<br/>'),
+                ['Вновь встают с земли', 'Опущенные дождем', 'Хризантем цветы.'].join('<br/>'),
+                ['Ты свечу зажег.', 'Словно молнии проблеск,', 'В ладонях возник.'].join('<br/>')
+            ];
+        }
+        return '<br>' + placemarkBodies[num % placemarkBodies.length];
+    }
     // clusterer.balloon.open(clusterer.getClusters()[0]); 
-    
+
     // let contentLayoutMaket = ymaps.templateLayoutFactory.createClass( 
     // '<div class="baloon">'+ 
     // '<div class="baloon__header">'+ 
@@ -193,93 +197,110 @@ import renderFn from './templates/template.hbs'
     //         })
     //     }
     // })
-    let buttonAdd = document.querySelector('.add')
-    let baloon = document.querySelector('.baloon')
-    let closeImage = document.querySelector('.button__image--clear')
-    let nameInput = document.querySelector('.name-input')
-    let placeInput = document.querySelector('.place-input')
-    let commentInput = document.querySelector('.comment-input')
-    let addressTitle = document.querySelector('.adres')
+    let buttonAdd = document.querySelector('.add');
+    let baloon = document.querySelector('.baloon');
+    let closeImage = document.querySelector('.button__image--clear');
+    let nameInput = document.querySelector('.name-input');
+    let placeInput = document.querySelector('.place-input');
+    let commentInput = document.querySelector('.comment-input');
+    let addressTitle = document.querySelector('.adres');
+    
+    let coords;
+    let placemark;
+    let position;
+    let rewiewObj;
 
-    map.events.add('click', e =>{
-        let coords = e.get('coords')
-        console.log(coords)
-        let position = e.get('position')
+    map.events.add('click', e => {
+
+        // console.log(target)
+        coords = e.get('coords')
+
+        // console.log(coords)
+
+        position = e.get('position')
+
         baloon.style.display = 'block';
         baloon.style.left = position[0] + 'px';
         baloon.style.top = position[1] + 'px';
-        let markers = [];
-        // let geoObj = [];
-        let placemarks;
-        
-        
+        // let markers = [];
+
         ymaps.geocode(coords).then(function (res) {
-            var firstGeoObject = res.geoObjects.get(0);
+            let firstGeoObject = res.geoObjects.get(0);
             // var address = firstGeoObject.properties._data.balloonContent;
             let adress = firstGeoObject.getAddressLine()
+
             console.log(adress)
             addressTitle.innerHTML = adress
-            })
+        })
+    });
+
+    buttonAdd.addEventListener('click', e => {
+        // console.log(coords)
+        let id = function () {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        };
+        rewiewObj = {
+            name: nameInput.value,
+            place: placeInput.value,
+            rewiew: commentInput.value,
+            coordinates: coords,
+            address: addressTitle.innerHTML,
+            position: position,
+            id: id()
+        }
+
+        // console.log(rewiewObj.name);
         
+        nameInput.value = '';
+        placeInput.value = '';
+        commentInput.value = '';
+        
+        if (!rewiewObj.name && !rewiewObj.place && !rewiewObj.rewiew) {
+            return
+        } 
 
-        buttonAdd.addEventListener('click', e => {
-            console.log('6')
-            let rewiewObj = {
-                name: undefined,
-                place: undefined,
-                rewiew: undefined,
-                coordinates: undefined,
-                address: undefined
+        placemark = new ymaps.GeoObject({
+            geometry: {
+                type: "Point",
+                coordinates: rewiewObj.coordinates
+            },
+            properties: {
+                id: rewiewObj.id
+                // balloonContentHeader: i.place,
+                // balloonContentBody: i.address,
+                // balloonContentFooter: i.rewiew
             }
-            
-            let nameRewiewer = nameInput.value;
-            let placeName = placeInput.value;
-            let commentText = commentInput.value;
-            nameInput.value = '';
-            placeInput.value = '';
-            commentInput.value = '';
-            
-            rewiewObj.coordinates = coords;
-            rewiewObj.name = nameRewiewer;
-            rewiewObj.place = placeName;
-            rewiewObj.rewiew = commentText;
-            if(!nameRewiewer && !placeName && !commentText){
-                return
-            } else {
-                markers.push(rewiewObj);
-                
-                console.log(markers);
-            }
+        });
 
-            markers.forEach( i => {
-                console.log(i.address);
-                let placemark = new ymaps.GeoObject({
-                    geometry:{
-                       type: "Point",
-                       coordinates: i.coordinates
-                    },
-                    properties:{
-                        balloonContentHeader: i.address,
-                        balloonContentBody: 'Содержимое балуна геообъекта №2.',
-                        balloonContentFooter: 'dsfsd'
-                    }
-                });
-                placemarks = placemark;
-            });
-            clusterer.add(placemarks);
-            map.geoObjects.add(clusterer);
-            // console.log(markers);
-            // console.log(placemark);
-        })
+        // console.log(placemark)
+        clusterer.add(placemark);
+        map.geoObjects.add(clusterer);
+        // console.log(markers);
+        // console.log(placemark);
+    })
 
-        closeImage.addEventListener('click', e => {
-            e.preventDefault()
-            baloon.style.display = 'none';
-        })
+    clusterer.events.add('click', e =>{
+        
+        let placemarkClick = e.get('target')
 
+        console.log(placemarkClick)
+
+        let id = placemarkClick.properties.get('id')
+
+        console.log(id)
+        console.log(rewiewObj.id)
+        // if(id === rewiewObj.id){
+        //     baloon.style.display = 'block'
+        //     rewiewObj.address
+        //     console.log(id)
+        // }
         
     })
 
-
-
-});
+    closeImage.addEventListener('click', e => {
+        // console.log(placemark)
+        e.preventDefault()
+        baloon.style.display = 'none';
+    })
+    
+})
