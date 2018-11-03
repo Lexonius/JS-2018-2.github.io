@@ -203,7 +203,7 @@ import renderFn from './templates/template.hbs'
 
     map.events.add('click', e =>{
         let coords = e.get('coords')
-        // console.log(coords)
+        console.log(coords)
         let position = e.get('position')
         baloon.style.display = 'block';
         baloon.style.left = position[0] + 'px';
@@ -211,8 +211,17 @@ import renderFn from './templates/template.hbs'
         let markers = [];
         // let geoObj = [];
         let placemarks;
-        getAdress(coords)
         
+        
+        ymaps.geocode(coords).then(function (res) {
+            var firstGeoObject = res.geoObjects.get(0);
+            // var address = firstGeoObject.properties._data.balloonContent;
+            let adress = firstGeoObject.getAddressLine()
+            console.log(adress)
+            addressTitle.innerHTML = adress
+            })
+        
+
         buttonAdd.addEventListener('click', e => {
             console.log('6')
             let rewiewObj = {
@@ -220,36 +229,39 @@ import renderFn from './templates/template.hbs'
                 place: undefined,
                 rewiew: undefined,
                 coordinates: undefined,
-                // marker: undefined
+                address: undefined
             }
             
-            rewiewObj.coordinates = coords
             let nameRewiewer = nameInput.value;
             let placeName = placeInput.value;
             let commentText = commentInput.value;
             nameInput.value = '';
             placeInput.value = '';
             commentInput.value = '';
+            
+            rewiewObj.coordinates = coords;
             rewiewObj.name = nameRewiewer;
             rewiewObj.place = placeName;
             rewiewObj.rewiew = commentText;
-
             if(!nameRewiewer && !placeName && !commentText){
                 return
             } else {
                 markers.push(rewiewObj);
+                
+                console.log(markers);
             }
 
             markers.forEach( i => {
+                console.log(i.address);
                 let placemark = new ymaps.GeoObject({
                     geometry:{
                        type: "Point",
-                       coordinates:i.coordinates
+                       coordinates: i.coordinates
                     },
                     properties:{
-                        // address: 
-                        // clusterCaption: 'Геообъект №2',
-                        // balloonContentBody: 'Содержимое балуна геообъекта №2.'
+                        balloonContentHeader: i.address,
+                        balloonContentBody: 'Содержимое балуна геообъекта №2.',
+                        balloonContentFooter: 'dsfsd'
                     }
                 });
                 placemarks = placemark;
@@ -265,16 +277,7 @@ import renderFn from './templates/template.hbs'
             baloon.style.display = 'none';
         })
 
-        function getAdress(){
-            ymaps.geocode(coords).then(function (res) {
-                var firstGeoObject = res.geoObjects.get(0);
-                // var address = firstGeoObject.properties._data.balloonContent;
-                let adress = firstGeoObject.getAddressLine()
-                console.log(adress)
-                addressTitle.innerHTML = adress
-                // addressMarker = address;
-                })
-            }
+        
     })
 
 
