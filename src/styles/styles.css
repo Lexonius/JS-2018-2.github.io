@@ -4,62 +4,93 @@
 }
 
 .baloon{
-    width: 350px;
-    height: 295px;
+    width: 380px;
+    height: 527px;
     background: #ffff;
     display: flex;
     flex-direction: column;
     display: none;
     z-index: 1000;
     position: absolute;
+    border-radius: 1rem 1rem 1rem 1rem;
 }
 .adres{
     font-size: 10px;
+    width: 80%;
+    color:white;
 }
 .baloon__header{
-    background-color: wheat;
-    justify-content: flex-end;
+    background-color:#ff8663;
+    justify-content: space-around;
     display: flex;
-    width: 350px;
-    height:20px;
-    border-radius: 5px 0 0 0;
+    height:44px;
+    border-radius: 1rem 1rem 0 0;
+    align-items: center;
 }
 .rewiews__block{
-    width: 350px;
+    
 }
 .rewiews__block--list{
     padding: 0;
     margin: 0;
-    height: 100px;
+    height: 155px;
+    margin-left: 4%;
+    margin-top: 4%;
 }
 .title{
     margin: 0;
+    list-style: none;
 }
 .name-input{
-    border-radius: 8px;
+    border-radius: 20px;
     outline: none;
+    border: 1px solid #c4c4c4;
+    height: 33px;
+    margin-bottom: 16px;
 }
 .place-input{
-    border-radius: 8px;
+    border-radius: 20px;
     outline: none;
+    border: 1px solid #c4c4c4;
+    height: 33px;
+    margin-bottom: 16px;
 }
 .comment-input{
-    width: 344px;
+    width: 89%;
     height: 100px;
     resize: none;
-    border-radius: 8px;
+    border-radius: 20px;
     outline: none;
+    margin-bottom: 16px;
 }
 .add{
     width: 20%;
     height: 25px;
     border: none;
-    background: wheat;
-    border-radius: 5px;
+    background: #ff8663;
     outline: none;
+    border-radius: 0.5rem 0.5rem 0.5rem 0.5rem;
 }
 .baloon__footer{
     display: flex;
     justify-content: flex-end;
-    border-radius: 5px 0 0 0;
+    
+    margin-right: 5%;
+}
+.rewiews__inputs{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rewiews__inputs--title{
+    margin-bottom: 16px;    
+}
+.rewiewe__inputs--top{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+}
+.address__marker{
+    height: 38%;
+    width: 2.5%;
 }

@@ -286,6 +286,7 @@ ymaps.ready(function () {
         console.log(placemarkClick)
 
         let id = placemarkClick.properties.get('id')
+        baloon.style.display = 'block';
 
         console.log(id)
         console.log(rewiewObj.id)
