@@ -28,6 +28,7 @@
     align-items: center;
 }
 .rewiews__block{
+    height: 425px;
     
 }
 .rewiews__block--list{
@@ -93,4 +94,18 @@
 .address__marker{
     height: 38%;
     width: 2.5%;
+}
+.review__list{
+    list-style: none;
+    height: 135px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+::-webkit-scrollbar{
+    /* width:12px; */
+}
+::-webkit-scrollbar-thumb{
+    border-width:1px 1px 1px 2px;
+    border-color:#ff8663;
+    background-color: #ff8663;
 }
