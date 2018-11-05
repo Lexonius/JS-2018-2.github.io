@@ -1,29 +1,20 @@
-<div class="baloon__header">
-            <div class="adres">
-            </div>
-            <div class="button__clear">
-                <img src="./IMG/remove.png" class="button__image--clear">
-            </div>
-        </div>
-        <div class="baloon__content">
-            <div class="rewiews__block">
-                <ul class="rewiews__block--list">
-                    <li class="title">
-                        
-                    </li>
-                </ul>
-                <div class="rewiews__inputs">
-                    <div class="rewiews__inputs--title">
-                        Ваш отзыв
-                    </div>
-                    <div class="rewiewe__inputs--top">
-                        <input type="text" class="name-input" placeholder="Ваше имя">
-                        <input type="text" class="place-input" placeholder="Укажите место">
-                    </div>
-                    <textarea class="comment-input" placeholder="Поделитесь впечатлениями"></textarea>    
-                </div>
-            </div>  
-        </div>
-        <div class="baloon__footer">
-            <button class="add"> Добавить </button>
-        </div>
+{{#if list}}
+	{{#each list}}
+		<li class="review__item">
+			<div class="review__item-title">
+				<span class="review__item-author">{{name}}</span>
+				<span class="review__item-place">{{place}}</span>
+				{{!-- <span class="review__item-date">{{formatDate date}}</span> --}}
+			</div>
+			<div class="review__item-content">
+				{{rewiew}}
+			</div>
+		</li>
+	{{/each}}
+{{else}}
+	<li class="review__item">
+		<div class="review__item-content">
+			Отзывов нет..
+		</div>
+	</li>
+{{/if}}

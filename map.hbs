@@ -4,6 +4,7 @@
     <title>Быстрый старт. Размещение интерактивной карты на странице</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7e3de7a6-4084-446a-b007-5cfbedefd82c&lang=ru_RU" type="text/javascript">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
     </script>
 </head>
 
@@ -21,12 +22,15 @@
         </div>
         <div class="baloon__content">
             <div class="rewiews__block">
-                <ul class="rewiews__block--list">
+                <ul class="review__list">
+                    
+                </ul>
+                {{!-- <ul class="rewiews__block--list">
                     <li class="title">
                         Отзывов пока нет...
                     </li>
                     
-                </ul>
+                </ul> --}}
                 <hr style="color:#c4c4c4; width:90%">
                 <div class="rewiews__inputs">
                     <div class="rewiews__inputs--title">

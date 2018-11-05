@@ -204,41 +204,36 @@ ymaps.ready(function () {
     let placeInput = document.querySelector('.place-input');
     let commentInput = document.querySelector('.comment-input');
     let addressTitle = document.querySelector('.adres');
-    
+    let reviewList = document.querySelector('.review__list');
     let coords;
     let placemark;
     let position;
     let rewiewObj;
+    let allReviews = [];
 
     map.events.add('click', e => {
 
-        // console.log(target)
         coords = e.get('coords')
-
-        // console.log(coords)
 
         position = e.get('position')
 
         baloon.style.display = 'block';
         baloon.style.left = position[0] + 'px';
         baloon.style.top = position[1] + 'px';
-        // let markers = [];
 
         ymaps.geocode(coords).then(function (res) {
             let firstGeoObject = res.geoObjects.get(0);
-            // var address = firstGeoObject.properties._data.balloonContent;
             let adress = firstGeoObject.getAddressLine()
 
-            console.log(adress)
             addressTitle.innerHTML = adress
         })
     });
 
     buttonAdd.addEventListener('click', e => {
-        // console.log(coords)
         let id = function () {
             return '_' + Math.random().toString(36).substr(2, 9);
         };
+
         rewiewObj = {
             name: nameInput.value,
             place: placeInput.value,
@@ -248,58 +243,82 @@ ymaps.ready(function () {
             position: position,
             id: id()
         }
-
-        // console.log(rewiewObj.name);
-        
+        if (!nameInput.value && !placeInput.value && !commentInput.value) {
+            return
+        } 
         nameInput.value = '';
         placeInput.value = '';
         commentInput.value = '';
-        
-        if (!rewiewObj.name && !rewiewObj.place && !rewiewObj.rewiew) {
-            return
-        } 
 
         placemark = new ymaps.GeoObject({
             geometry: {
-                type: "Point",
+                type: 'Point',
                 coordinates: rewiewObj.coordinates
             },
             properties: {
-                id: rewiewObj.id
-                // balloonContentHeader: i.place,
-                // balloonContentBody: i.address,
+                id: rewiewObj.id,
+                addressPlacemark: rewiewObj.address,
+                reviews: rewiewObj.rewiew,
+                coordinates: rewiewObj.coordinates,
+                position: position,
+                name: rewiewObj.name,
+                place: rewiewObj.place,
+                review: rewiewObj.review
+                // balloonContentHeader: rewiewObj.address,
+                // balloonContentBody: rewiewObj.rewiew
                 // balloonContentFooter: i.rewiew
             }
         });
 
-        // console.log(placemark)
+        allReviews.push(rewiewObj);
         clusterer.add(placemark);
         map.geoObjects.add(clusterer);
-        // console.log(markers);
-        // console.log(placemark);
     })
 
     clusterer.events.add('click', e =>{
         
         let placemarkClick = e.get('target')
 
-        console.log(placemarkClick)
+        if (!placemarkClick.hasOwnProperty('_clusterListeners')) {
+            // let id = placemarkClick.properties.get('id')
+            baloon.style.left = placemarkClick.properties._data.position[0] + 'px';
+            baloon.style.top = placemarkClick.properties._data.position[1] + 'px';
+            baloon.style.display = 'block';
+            console.log(allReviews);
 
-        let id = placemarkClick.properties.get('id')
-        baloon.style.display = 'block';
+            let filterReviews = allReviews.filter(i => i.address === placemarkClick.properties._data.addressPlacemark);
 
-        console.log(id)
-        console.log(rewiewObj.id)
-        // if(id === rewiewObj.id){
-        //     baloon.style.display = 'block'
-        //     rewiewObj.address
-        //     console.log(id)
-        // }
-        
+            filterReviews.forEach(element => {
+                console.log(element.address)
+                console.log(placemarkClick.properties._data.addressPlacemark)
+                if (placemarkClick.properties._data.addressPlacemark !== element.address) {
+                    return
+                } else {
+                    let _review = renderFn({ list: filterReviews })
+                    reviewList.innerHTML = _review
+                }
+            });
+            
+            // console.log(_review);
+            // let _review = renderFn({ list: filterReviews })
+            //     reviewList.innerHTML = _review
+            
+            addressTitle.innerHTML = placemarkClick.properties._data.addressPlacemark;
+
+            console.log(placemarkClick)
+        } else {
+            console.log('FUCKING CLUSTER')
+            let _geoObjects = placemarkClick.properties._data.geoObjects;
+
+            for (let i = 0; i < _geoObjects.length; i++) {
+                // let id = _geoObjects[i].properties.get('id');
+
+                // console.log(_geoObjects[i])
+            }
+        }
     })
 
     closeImage.addEventListener('click', e => {
-        // console.log(placemark)
         e.preventDefault()
         baloon.style.display = 'none';
     })
