@@ -75,28 +75,28 @@ ymaps.ready(function () {
         //получаем координаты
         coords = e.get('coords')
         //получаем позицию
-        position = e.get('position')
+        
         //обнуляем инпуты
         nameInput.value = '';
         placeInput.value = '';
         commentInput.value = '';
         reviewList.innerHTML = '';
-        
-        
+        position = e.get('position')
         baloon.style.display = 'block';
         let baloonWidth = baloon.getBoundingClientRect().width + position[0];
-
         let baloonHeight = baloon.getBoundingClientRect().height + position[1];
         //если ширина или высота балуна + координаты x или y больше или равны ширине или высоте окна
-        if(baloonWidth >= clientWidth && baloonHeight >= clientHeight){
-            //тогда вычитаем из ширины или длины окна ширину или высоту балуна
+        if(baloonWidth >= clientWidth){
+        //тогда вычитаем из ширины или длины окна ширину или высоту балуна
             baloon.style.left = clientWidth - baloon.getBoundingClientRect().width + 'px';
-                
+        } else if(baloonHeight >= clientHeight){
             baloon.style.top = clientHeight - baloon.getBoundingClientRect().height + 'px';
         } else {
             baloon.style.left = position[0] + 'px';
             baloon.style.top = position[1] + 'px';
         }
+
+        
         
         reviewList.innerHTML = 'Отзывов нет...'
         //получаем координаты
@@ -212,11 +212,9 @@ ymaps.ready(function () {
             //значения которой лежат в свойстве кликнутой метки
         //отображаем блок
         baloon.style.display = 'block';
-        //перменная, внутри которой дежит ширина балуна + координаты х
         let baloonWidth = baloon.getBoundingClientRect().width + placemarkClick.properties._data.position[0];
-        //перменная, внутри которой дежит высота балуна + координаты у
         let baloonHeight = baloon.getBoundingClientRect().height + placemarkClick.properties._data.position[1];
-            //если ширина или высота балуна + координаты x или y больше или равны ширине или высоте окна
+            
         if(baloonWidth >= clientWidth || baloonHeight >= clientHeight){
             //тогда вычитаем из ширины или длины окна ширину или высоту балуна
             baloon.style.left = clientWidth - baloon.getBoundingClientRect().width + 'px';
@@ -224,7 +222,6 @@ ymaps.ready(function () {
             baloon.style.top = clientHeight - baloon.getBoundingClientRect().height + 'px';
         } else {
             baloon.style.left = placemarkClick.properties._data.position[0] + 'px';
-
             baloon.style.top = placemarkClick.properties._data.position[1] + 'px';
         }
 
