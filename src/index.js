@@ -14,12 +14,13 @@ ymaps.ready(function () {
     // Создаем собственный макет с информацией о выбранном геообъекте. 
     var customItemContentLayout = ymaps.templateLayoutFactory.createClass(
         // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html. 
-        '<div class=ballon_header> <a href=#>{{ properties.place|raw }} </a></div>' +
-        '<div class=ballon_body>{{ properties.review|raw }}</div>' +
-        '<div class=ballon_footer>{{ properties.date|raw }}</div>'
+        '<div class=ballon_header> {{ properties.place|raw }} </div>' +
+        '<div class=ballon_body><a href=# data-id="{{properties.id|raw}}">{{ properties.addressPlacemark|raw }}</a><br>{{ properties.review|raw }}</div>' +
+        '<div class=ballon_footer><br>{{ properties.date|raw }}</div>'
     );
 
     var clusterer = new ymaps.Clusterer({
+        preset: 'islands#invertedRedClusterIcons',
         clusterDisableClickZoom: true,
         clusterOpenBalloonOnClick: true,
         // Устанавливаем стандартный макет балуна кластера "Карусель". 
@@ -33,7 +34,9 @@ ymaps.ready(function () {
         clusterBalloonContentLayoutWidth: 200,
         clusterBalloonContentLayoutHeight: 130,
         // Устанавливаем максимальное количество элементов в нижней панели на одной странице 
-        clusterBalloonPagerSize: 5
+        clusterBalloonPagerSize: 5,
+        hideIconOnBalloonOpen: false,
+        cursor: 'pointer'
         // Настройка внешего вида нижней панели. 
         // Режим marker рекомендуется использовать с небольшим количеством элементов. 
         // clusterBalloonPagerType: 'marker', 
@@ -51,13 +54,23 @@ ymaps.ready(function () {
     let commentInput = document.querySelector('.comment-input');
     let addressTitle = document.querySelector('.adres');
     let reviewList = document.querySelector('.review__list');
+    let clientWidth = document.documentElement.clientWidth
+    let clientHeight = document.documentElement.clientHeight
     let coords;
     let placemark;
     let position;
+    let idObj;
     let reviewObj;
     let allReviews = [];
-    
     //по нажатию на карту
+
+    // if(localStorage.getItem('store')){
+    //     let revParse = JSON.parse(localStorage.getItem('store'))
+    //     let revListArr = revParse;
+    //     alert("nice")
+    //     console.log(revListArr);
+    // }    
+
     map.events.add('click', e => {
         //получаем координаты
         coords = e.get('coords')
@@ -68,9 +81,23 @@ ymaps.ready(function () {
         placeInput.value = '';
         commentInput.value = '';
         reviewList.innerHTML = '';
+        
+        
         baloon.style.display = 'block';
-        baloon.style.left = position[0] + 'px';
-        baloon.style.top = position[1] + 'px';
+        let baloonWidth = baloon.getBoundingClientRect().width + position[0];
+
+        let baloonHeight = baloon.getBoundingClientRect().height + position[1];
+        //если ширина или высота балуна + координаты x или y больше или равны ширине или высоте окна
+        if(baloonWidth >= clientWidth && baloonHeight >= clientHeight){
+            //тогда вычитаем из ширины или длины окна ширину или высоту балуна
+            baloon.style.left = clientWidth - baloon.getBoundingClientRect().width + 'px';
+                
+            baloon.style.top = clientHeight - baloon.getBoundingClientRect().height + 'px';
+        } else {
+            baloon.style.left = position[0] + 'px';
+            baloon.style.top = position[1] + 'px';
+        }
+        
         reviewList.innerHTML = 'Отзывов нет...'
         //получаем координаты
         ymaps.geocode(coords).then(function (res) {
@@ -80,13 +107,18 @@ ymaps.ready(function () {
             //вставляем координаты в header карточки
             addressTitle.innerHTML = adress
         })
-    });
-
-    buttonAdd.addEventListener('click', () => {
+        
         let id = function () {
             return '_' + Math.random().toString(36).substr(2, 9);
         };
-        let date = new Date();
+        idObj = id()
+
+            
+    });
+
+    buttonAdd.addEventListener('click', () => {
+        
+        let now = new Date();
         //по нажатию на кнопку добавить создаем объект,
         //свойства которого заполняем значенями инпутов,
         //координатами и позицией, датой
@@ -97,8 +129,14 @@ ymaps.ready(function () {
             coordinates: coords,
             address: addressTitle.innerHTML,
             position: position,
-            id: id(),
-            date: date.toUTCString()
+            id: idObj,
+            date: {
+                weekDay: now.getDate(),
+                month: now.getMonth(),
+                year: now.getFullYear(),
+                hour: now. getHours(),
+                minutes: now.getMinutes()
+            }
         }
         //проверяем, если какое либо из полей не заполнено,
         //прерываем работу функции
@@ -125,8 +163,10 @@ ymaps.ready(function () {
                 name: reviewObj.name,
                 place: reviewObj.place,
                 review: reviewObj.review,
-                date: reviewObj.date
+                date: reviewObj.id
             }
+            },{
+                preset:'islands#redCircleDotIcon',
         });
         //пушим созданный объект в массив
         allReviews.push(reviewObj);
@@ -135,14 +175,17 @@ ymaps.ready(function () {
         //отрисовываем кластер
         map.geoObjects.add(clusterer);
         //фильтруем массив со всеми добавленными объектами:
-        //если адрес у элемента массива совпадает с адресом
+        //если id у элемента массива совпадает с id
         //метки, то получаем новый массив с нужным элементом
-        let filterReviews = allReviews.filter(i => i.address === placemark.properties._data.addressPlacemark);
+        let filterReviews = allReviews.filter(i => i.id === placemark.properties._data.id);
+        
         //новый массив перебираем циклом
         filterReviews.forEach(element => {
-            //проверяем, что если адрес метки не совпадает с адресом элементом массива
+            //проверяем, что если id метки не совпадает с id элементом массива
             //то прерываем работу функции
-            if (placemark.properties._data.addressPlacemark !== element.address) {
+            // console.log(placemark.properties._data.id);
+            
+            if (placemark.properties._data.id !== element.id) {
                 return
             }
             //отправляем в шаблонизатор отфильтрованный массив и отрисовываем
@@ -150,31 +193,55 @@ ymaps.ready(function () {
 
             reviewList.innerHTML = _review
         });
+            // localStorage.setItem('store', JSON.stringify({
+            //     revList: allReviews
+            // }))
+            // alert('Data OK')
     })
+
+    let placemarkClick;
     //по нажатию на кластер
     clusterer.events.add('click', e =>{
         //смотрим на какой элемент пришелся клик
-        let placemarkClick = e.get('target')
+        placemarkClick = e.get('target')
+        console.log(e.get('position'));
+        
         //если у кликнутого элемента есть свойство
         if (!placemarkClick.hasOwnProperty('_clusterListeners')) {
             //то передвигаем и выводим на экран карточку по позиции,
             //значения которой лежат в свойстве кликнутой метки
+        //отображаем блок
+        baloon.style.display = 'block';
+        //перменная, внутри которой дежит ширина балуна + координаты х
+        let baloonWidth = baloon.getBoundingClientRect().width + placemarkClick.properties._data.position[0];
+        //перменная, внутри которой дежит высота балуна + координаты у
+        let baloonHeight = baloon.getBoundingClientRect().height + placemarkClick.properties._data.position[1];
+            //если ширина или высота балуна + координаты x или y больше или равны ширине или высоте окна
+        if(baloonWidth >= clientWidth || baloonHeight >= clientHeight){
+            //тогда вычитаем из ширины или длины окна ширину или высоту балуна
+            baloon.style.left = clientWidth - baloon.getBoundingClientRect().width + 'px';
+                
+            baloon.style.top = clientHeight - baloon.getBoundingClientRect().height + 'px';
+        } else {
             baloon.style.left = placemarkClick.properties._data.position[0] + 'px';
+
             baloon.style.top = placemarkClick.properties._data.position[1] + 'px';
-            baloon.style.display = 'block';
+        }
+
             //фильтруем массив со всеми добавленными объектами:
-            //если адрес у элемента массива совпадает с адресом
+            //если id у элемента массива совпадает с id
             //метки, то получаем новый массив с нужным элементом
-            let filterReviews = allReviews.filter(i => i.address === placemarkClick.properties._data.addressPlacemark);
+            let filterReviews = allReviews.filter(i => i.id === placemarkClick.properties._data.id);
             //новый массив перебираем циклом
             filterReviews.forEach(element => {
                 //проверяем, что если адрес кликнутой метки не совпадает с адресом элементом массива
                 //то прерываем работу функции
-                if (placemarkClick.properties._data.addressPlacemark !== element.address) {
+                if (placemarkClick.properties._data.id !== element.id) {
                     return
                 }
+                //отправляем в шаблонизатор отфильтрованный массив и отрисовываем
                 let _review = renderFn({ list: filterReviews })
-                
+    
                 reviewList.innerHTML = _review
             });
 
@@ -186,14 +253,40 @@ ymaps.ready(function () {
     document.addEventListener('click', e => {
         let linkTarget = e.target;
 
-        console.log(linkTarget)
         if (linkTarget.tagName !== 'A'){
-            console.log ('34');
             return
         } else {
-            baloon.style.display = 'block';
-            baloon.style.left = reviewObj.position[0] + 'px';
-            baloon.style.top = reviewObj.position[1] + 'px';
+
+        baloon.style.display = 'block';
+        let baloonWidth = baloon.getBoundingClientRect().width + e.pageX;
+
+        let baloonHeight = baloon.getBoundingClientRect().height + e.pageY;
+
+
+        if(baloonWidth >= clientWidth || baloonHeight >= clientHeight){
+            baloon.style.left = clientWidth - baloon.getBoundingClientRect().width + 'px';
+  
+            baloon.style.top = clientHeight - baloon.getBoundingClientRect().height + 'px';
+
+        } else {
+            baloon.style.left = e.pageX + 'px';
+            baloon.style.top = e.pageY + 'px';
+        }
+            
+            let filterReviews = allReviews.filter(i => i.id === linkTarget.getAttribute('data-id'));
+                
+            filterReviews.forEach(element => {
+                //проверяем, что если адрес кликнутой метки не совпадает с адресом элементом массива
+                //то прерываем работу функции
+                if (linkTarget.getAttribute('data-id') !== element.id) {
+                    return
+                }
+                //отправляем в шаблонизатор отфильтрованный массив и отрисовываем
+                let _review = renderFn({ list: filterReviews })
+    
+                reviewList.innerHTML = _review
+            });
+            
         }
         
     })
