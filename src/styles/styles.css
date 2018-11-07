@@ -1,7 +1,7 @@
-#map {
+/* #map {
     width: 1912px;
     height: 1070px;
-}
+} */
 
 .baloon{
     width: 380px;
@@ -11,7 +11,7 @@
     flex-direction: column;
     display: none;
     z-index: 1000;
-    position: absolute;
+    position: fixed;
     border-radius: 1rem 1rem 1rem 1rem;
 }
 .adres{
